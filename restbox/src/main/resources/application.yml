@@ -1,0 +1,7 @@
+# Main application configuration file.
+#
+# @author TSS
+
+spring:
+  profiles:
+    active: invalid

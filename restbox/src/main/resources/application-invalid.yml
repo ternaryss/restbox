@@ -1,0 +1,6 @@
+# Configuration file for 'invalid' application profile.
+#
+# @author TSS
+
+server:
+  port: 8081

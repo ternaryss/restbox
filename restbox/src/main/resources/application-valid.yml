@@ -1,0 +1,6 @@
+# Configuration file for 'valid' application profile.
+#
+# @author TSS
+
+server:
+  port: 8080
