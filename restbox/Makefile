@@ -17,7 +17,7 @@ clean:
 	echo "--- Cleaning $(app)-$(version) ---"
 	$(gradle) clean
 
-run:
+run: build
 	java -jar $(path)/$(app)-$(version).jar
 
 test:
