@@ -42,6 +42,7 @@ gradle-app.setting
 
 ### Gradle Patch ###
 **/build/
+**/bin/
 
 # Eclipse Gradle plugin generated files
 # Eclipse Core
