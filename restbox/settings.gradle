@@ -1,0 +1,5 @@
+// Additional settings for restbox build.
+//
+// @author TSS
+
+rootProject.name = 'restbox'
