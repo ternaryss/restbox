@@ -18,6 +18,9 @@ clean:
 	echo "--- Cleaning $(app)-$(version) ---"
 	$(gradle) clean
 
+run: build
+	java -jar $(path)/$(app)-$(version).jar
+
 run-invalid: build
 	java -jar $(path)/$(app)-$(version).jar $(profile)=invalid
 
