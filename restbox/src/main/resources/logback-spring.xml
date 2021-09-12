@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Logger configuration -->
+<!-- @author TSS -->
+
+<configuration>
+  <logger name="pl.tss.restbox" level="info" />
+  <logger name="org.springframework.boot" level="info" />
+  <logger name="org.springframework.data" level="info" />
+  <logger name="org.springframework.orm" level="warn" />
+  <logger name="org.hibernate" level="warn" />
+  <logger name="com.zaxxer" level="warn" />
+
+  <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>[%d{dd.MM.yyyy (HH:mm:ss)}] [%C] [%p] ----- %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <root level="info">
+    <appender-ref ref="console" />
+  </root>
+</configuration>
