@@ -5,14 +5,13 @@
 spring:
   profiles:
     active: "invalid"
-  datasource:
-    url: "jdbc:h2:file:/data/restbox"
-    driverClassName: "org.h2.Driver"
-    username: "admin"
-    password: "admin"
   h2:
     console:
       enabled: true
       path: "/h2db"
       settings:
         web-allow-others: true
+    driver: "org.h2.Driver"
+    file: "/data/restbox"
+    username: "admin"
+    password: "admin"
