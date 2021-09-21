@@ -1,4 +1,4 @@
-package pl.tss.restbox.infra;
+package pl.tss.restbox.rest.infra;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
