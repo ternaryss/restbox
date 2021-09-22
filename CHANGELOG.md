@@ -4,6 +4,7 @@ History of **restbox** with changes description.
 
 ## Unreleased
 
+- Handle database migrations during launch
 - In memory SQL relational database with persistence layer
 - Disabled default CORS policy
 - Default logging strategy
