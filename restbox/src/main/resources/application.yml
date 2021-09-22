@@ -11,7 +11,8 @@ spring:
       path: "/h2db"
       settings:
         web-allow-others: true
-    driver: "org.h2.Driver"
     file: "/data/restbox"
     username: "admin"
     password: "admin"
+    migrations:
+      - "/h2/init-1.0.0.sql"
