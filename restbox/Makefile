@@ -3,6 +3,7 @@
 # @author TSS
 
 app = restbox
+db = data/
 gradle = ./gradlew
 path = build/libs
 profile = --spring.profiles.active
@@ -17,6 +18,7 @@ build: clean
 clean:
 	echo "--- Cleaning $(app)-$(version) ---"
 	$(gradle) clean
+	rm -rf $(db)
 
 run: build
 	java -jar $(path)/$(app)-$(version).jar
