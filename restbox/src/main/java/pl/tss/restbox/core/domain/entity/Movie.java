@@ -38,12 +38,13 @@ public class Movie implements Serializable {
   private OffsetDateTime modifyDate;
 
   private Person director;
+  private Genere genere;
   private List<Actor> actors;
 
   private Movie() {
   }
 
-  public Movie(String title, OffsetDateTime premiere, int rate, int length, Person director) {
+  public Movie(String title, OffsetDateTime premiere, int rate, int length, Person director, Genere genere) {
     this.title = title;
     this.premiere = premiere;
     this.rate = rate;
@@ -52,6 +53,7 @@ public class Movie implements Serializable {
     this.modifyDate = OffsetDateTime.now();
 
     this.director = director;
+    this.genere = genere;
     this.actors = new ArrayList<>();
   }
 
@@ -175,6 +177,16 @@ public class Movie implements Serializable {
 
   public void setDirector(Person director) {
     this.director = director;
+  }
+
+  @ManyToOne
+  @JoinColumn(name = "gen_gen_id", referencedColumnName = "gen_id", nullable = false)
+  public Genere getGenere() {
+    return genere;
+  }
+
+  public void setGenere(Genere genere) {
+    this.genere = genere;
   }
 
 }
