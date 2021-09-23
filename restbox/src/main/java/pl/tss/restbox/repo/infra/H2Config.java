@@ -11,6 +11,7 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
@@ -24,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Configuration
 @EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class })
+@EnableJpaRepositories(considerNestedRepositories = true, basePackages = { "pl.tss.restbox.repo.db" })
 class H2Config {
 
   private final H2Properties properties;
