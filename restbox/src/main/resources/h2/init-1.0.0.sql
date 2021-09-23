@@ -46,9 +46,9 @@ create table if not exists movie (
   act boolean not null default true,
   create_date timestamp not null default current_timestamp,
   modify_date timestamp not null default current_timestamp,
-  foreign key (cou_cou_id) references country (cou_id),
-  foreign key (gen_gen_id) references genere (gen_id),
-  foreign key (per_per_id) references person (per_id)
+  foreign key (cou_cou_id) references country (cou_id) on delete cascade on update no action,
+  foreign key (gen_gen_id) references genere (gen_id) on delete cascade on update no action,
+  foreign key (per_per_id) references person (per_id) on delete cascade on update no action
 );
 
 create table if not exists actor (
