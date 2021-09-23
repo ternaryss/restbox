@@ -9,10 +9,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author TSS
  */
 @SpringBootApplication
-public class Main {
+public class Restbox {
 
   public static void main(String[] args) {
-    SpringApplication.run(Main.class, args);
+    SpringApplication.run(Restbox.class, args);
   }
 
 }
