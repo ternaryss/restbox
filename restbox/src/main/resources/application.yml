@@ -16,3 +16,6 @@ spring:
     password: "admin"
     migrations:
       - "/h2/init-1.0.0.sql"
+
+rest-api:
+  lang: "en"
