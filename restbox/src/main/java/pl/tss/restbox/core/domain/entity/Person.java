@@ -2,6 +2,7 @@ package pl.tss.restbox.core.domain.entity;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 import javax.persistence.Basic;
@@ -158,6 +159,10 @@ public class Person implements Serializable {
   @Override
   public int hashCode() {
     return Objects.hash(perId, firstName, secondName, lastName, birthday, rate, director, act, modifyDate);
+  }
+
+  public int getAge() {
+    return Math.abs((int) ChronoUnit.YEARS.between(birthday, OffsetDateTime.now()));
   }
 
 }
