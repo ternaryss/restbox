@@ -30,15 +30,17 @@ public class Actor implements Serializable {
   private OffsetDateTime modifyDate;
 
   private Person person;
+  private Movie movie;
 
   private Actor() {
   }
 
-  public Actor(Person person) {
+  public Actor(Person person, Movie movie) {
     this.act = true;
     this.modifyDate = OffsetDateTime.now();
 
     this.person = person;
+    this.movie = movie;
   }
 
   @Id
@@ -100,6 +102,16 @@ public class Actor implements Serializable {
 
   public void setPerson(Person person) {
     this.person = person;
+  }
+
+  @ManyToOne
+  @JoinColumn(name = "mov_mov_id", referencedColumnName = "mov_id", nullable = false)
+  public Movie getMovie() {
+    return movie;
+  }
+
+  public void setMovie(Movie movie) {
+    this.movie = movie;
   }
 
 }

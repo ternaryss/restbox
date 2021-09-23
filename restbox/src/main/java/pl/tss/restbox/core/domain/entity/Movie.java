@@ -2,6 +2,8 @@ package pl.tss.restbox.core.domain.entity;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Basic;
@@ -10,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -32,6 +35,8 @@ public class Movie implements Serializable {
   private boolean act;
   private OffsetDateTime modifyDate;
 
+  private List<Actor> actors;
+
   private Movie() {
   }
 
@@ -42,6 +47,8 @@ public class Movie implements Serializable {
     this.length = length;
     this.act = true;
     this.modifyDate = OffsetDateTime.now();
+
+    this.actors = new ArrayList<>();
   }
 
   @Id
@@ -145,6 +152,15 @@ public class Movie implements Serializable {
   @Override
   public int hashCode() {
     return Objects.hash(movId, title, description, premiere, rate, length, act, modifyDate);
+  }
+
+  @OneToMany(mappedBy = "movie")
+  public List<Actor> getActors() {
+    return actors;
+  }
+
+  public void setActors(List<Actor> actors) {
+    this.actors = actors;
   }
 
 }
