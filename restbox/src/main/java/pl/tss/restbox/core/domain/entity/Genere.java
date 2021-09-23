@@ -38,7 +38,7 @@ public class Genere implements Serializable {
   }
 
   @Id
-  @Column(name = "gen_id")
+  @Column(name = "gen_id", unique = true)
   @GeneratedValue(strategy = GenerationType.AUTO)
   public int getGenId() {
     return genId;
@@ -49,7 +49,7 @@ public class Genere implements Serializable {
   }
 
   @Basic
-  @Column(name = "name")
+  @Column(name = "name", unique = true)
   public String getName() {
     return name;
   }
