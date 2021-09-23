@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -27,9 +29,16 @@ public class Actor implements Serializable {
   private boolean act;
   private OffsetDateTime modifyDate;
 
-  public Actor() {
+  private Person person;
+
+  private Actor() {
+  }
+
+  public Actor(Person person) {
     this.act = true;
     this.modifyDate = OffsetDateTime.now();
+
+    this.person = person;
   }
 
   @Id
@@ -81,6 +90,16 @@ public class Actor implements Serializable {
   @Override
   public int hashCode() {
     return Objects.hash(actId, act, modifyDate);
+  }
+
+  @ManyToOne
+  @JoinColumn(name = "per_per_id", referencedColumnName = "per_id", nullable = false)
+  public Person getPerson() {
+    return person;
+  }
+
+  public void setPerson(Person person) {
+    this.person = person;
   }
 
 }

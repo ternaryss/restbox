@@ -3,6 +3,8 @@ package pl.tss.restbox.core.domain.entity;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Basic;
@@ -11,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -35,6 +38,8 @@ public class Person implements Serializable {
   private boolean act;
   private OffsetDateTime modifyDate;
 
+  private List<Actor> actors;
+
   private Person() {
   }
 
@@ -46,6 +51,8 @@ public class Person implements Serializable {
     this.director = director;
     this.act = true;
     this.modifyDate = OffsetDateTime.now();
+
+    this.actors = new ArrayList<>();
   }
 
   @Id
@@ -165,6 +172,15 @@ public class Person implements Serializable {
   @Transient
   public int getAge() {
     return Math.abs((int) ChronoUnit.YEARS.between(birthday, OffsetDateTime.now()));
+  }
+
+  @OneToMany(mappedBy = "person")
+  public List<Actor> getActors() {
+    return actors;
+  }
+
+  public void setActors(List<Actor> actors) {
+    this.actors = actors;
   }
 
 }
