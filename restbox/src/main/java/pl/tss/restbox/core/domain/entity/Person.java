@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  * Person treated as movie director or actor.
@@ -161,6 +162,7 @@ public class Person implements Serializable {
     return Objects.hash(perId, firstName, secondName, lastName, birthday, rate, director, act, modifyDate);
   }
 
+  @Transient
   public int getAge() {
     return Math.abs((int) ChronoUnit.YEARS.between(birthday, OffsetDateTime.now()));
   }
