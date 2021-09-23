@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -35,12 +37,13 @@ public class Movie implements Serializable {
   private boolean act;
   private OffsetDateTime modifyDate;
 
+  private Person director;
   private List<Actor> actors;
 
   private Movie() {
   }
 
-  public Movie(String title, OffsetDateTime premiere, int rate, int length) {
+  public Movie(String title, OffsetDateTime premiere, int rate, int length, Person director) {
     this.title = title;
     this.premiere = premiere;
     this.rate = rate;
@@ -48,6 +51,7 @@ public class Movie implements Serializable {
     this.act = true;
     this.modifyDate = OffsetDateTime.now();
 
+    this.director = director;
     this.actors = new ArrayList<>();
   }
 
@@ -161,6 +165,16 @@ public class Movie implements Serializable {
 
   public void setActors(List<Actor> actors) {
     this.actors = actors;
+  }
+
+  @ManyToOne
+  @JoinColumn(name = "per_per_id", referencedColumnName = "per_id", nullable = false)
+  public Person getDirector() {
+    return director;
+  }
+
+  public void setDirector(Person director) {
+    this.director = director;
   }
 
 }

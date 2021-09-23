@@ -38,6 +38,7 @@ public class Person implements Serializable {
   private boolean act;
   private OffsetDateTime modifyDate;
 
+  private List<Movie> movies;
   private List<Actor> actors;
 
   private Person() {
@@ -52,6 +53,7 @@ public class Person implements Serializable {
     this.act = true;
     this.modifyDate = OffsetDateTime.now();
 
+    this.movies = new ArrayList<>();
     this.actors = new ArrayList<>();
   }
 
@@ -181,6 +183,15 @@ public class Person implements Serializable {
 
   public void setActors(List<Actor> actors) {
     this.actors = actors;
+  }
+
+  @OneToMany(mappedBy = "director")
+  public List<Movie> getMovies() {
+    return movies;
+  }
+
+  public void setMovies(List<Movie> movies) {
+    this.movies = movies;
   }
 
 }
