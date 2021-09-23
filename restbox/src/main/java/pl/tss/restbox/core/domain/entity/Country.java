@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -106,7 +107,7 @@ public class Country implements Serializable {
     return Objects.hash(couId, name, act, modifyDate);
   }
 
-  @OneToMany(mappedBy = "country")
+  @OneToMany(mappedBy = "country", cascade = CascadeType.ALL, orphanRemoval = true)
   public List<Movie> getMovies() {
     return movies;
   }

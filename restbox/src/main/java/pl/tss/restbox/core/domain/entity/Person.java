@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -185,7 +186,7 @@ public class Person implements Serializable {
     this.actors = actors;
   }
 
-  @OneToMany(mappedBy = "director")
+  @OneToMany(mappedBy = "director", cascade = CascadeType.ALL, orphanRemoval = true)
   public List<Movie> getMovies() {
     return movies;
   }
