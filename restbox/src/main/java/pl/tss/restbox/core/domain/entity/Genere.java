@@ -38,7 +38,7 @@ public class Genere implements Serializable {
   }
 
   @Id
-  @Column(name = "gen_id", unique = true)
+  @Column(name = "gen_id", nullable = false, unique = true)
   @GeneratedValue(strategy = GenerationType.AUTO)
   public int getGenId() {
     return genId;
@@ -49,7 +49,7 @@ public class Genere implements Serializable {
   }
 
   @Basic
-  @Column(name = "name", unique = true)
+  @Column(name = "name", nullable = false, unique = true)
   public String getName() {
     return name;
   }
@@ -59,7 +59,7 @@ public class Genere implements Serializable {
   }
 
   @Basic
-  @Column(name = "act")
+  @Column(name = "act", nullable = false)
   public boolean isAct() {
     return act;
   }
@@ -69,7 +69,7 @@ public class Genere implements Serializable {
   }
 
   @Basic
-  @Column(name = "modify_date")
+  @Column(name = "modify_date", nullable = false)
   public OffsetDateTime getModifyDate() {
     return modifyDate;
   }

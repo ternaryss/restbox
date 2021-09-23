@@ -38,7 +38,7 @@ public class Country implements Serializable {
   }
 
   @Id
-  @Column(name = "cou_id", unique = true)
+  @Column(name = "cou_id", nullable = false, unique = true)
   @GeneratedValue(strategy = GenerationType.AUTO)
   public int getCouId() {
     return couId;
@@ -49,7 +49,7 @@ public class Country implements Serializable {
   }
 
   @Basic
-  @Column(name = "name", unique = true)
+  @Column(name = "name", nullable = false, unique = true)
   public String getName() {
     return name;
   }
@@ -59,7 +59,7 @@ public class Country implements Serializable {
   }
 
   @Basic
-  @Column(name = "act")
+  @Column(name = "act", nullable = false)
   public boolean isAct() {
     return act;
   }
@@ -69,7 +69,7 @@ public class Country implements Serializable {
   }
 
   @Basic
-  @Column(name = "modify_date")
+  @Column(name = "modify_date", nullable = false)
   public OffsetDateTime getModifyDate() {
     return modifyDate;
   }
