@@ -38,13 +38,15 @@ public class Movie implements Serializable {
   private OffsetDateTime modifyDate;
 
   private Person director;
+  private Country country;
   private Genere genere;
   private List<Actor> actors;
 
   private Movie() {
   }
 
-  public Movie(String title, OffsetDateTime premiere, int rate, int length, Person director, Genere genere) {
+  public Movie(String title, OffsetDateTime premiere, int rate, int length, Person director, Country country,
+      Genere genere) {
     this.title = title;
     this.premiere = premiere;
     this.rate = rate;
@@ -53,6 +55,7 @@ public class Movie implements Serializable {
     this.modifyDate = OffsetDateTime.now();
 
     this.director = director;
+    this.country = country;
     this.genere = genere;
     this.actors = new ArrayList<>();
   }
@@ -160,15 +163,6 @@ public class Movie implements Serializable {
     return Objects.hash(movId, title, description, premiere, rate, length, act, modifyDate);
   }
 
-  @OneToMany(mappedBy = "movie")
-  public List<Actor> getActors() {
-    return actors;
-  }
-
-  public void setActors(List<Actor> actors) {
-    this.actors = actors;
-  }
-
   @ManyToOne
   @JoinColumn(name = "per_per_id", referencedColumnName = "per_id", nullable = false)
   public Person getDirector() {
@@ -180,6 +174,16 @@ public class Movie implements Serializable {
   }
 
   @ManyToOne
+  @JoinColumn(name = "cou_cou_id", referencedColumnName = "cou_id", nullable = false)
+  public Country getCountry() {
+    return country;
+  }
+
+  public void setCountry(Country country) {
+    this.country = country;
+  }
+
+  @ManyToOne
   @JoinColumn(name = "gen_gen_id", referencedColumnName = "gen_id", nullable = false)
   public Genere getGenere() {
     return genere;
@@ -187,6 +191,15 @@ public class Movie implements Serializable {
 
   public void setGenere(Genere genere) {
     this.genere = genere;
+  }
+
+  @OneToMany(mappedBy = "movie")
+  public List<Actor> getActors() {
+    return actors;
+  }
+
+  public void setActors(List<Actor> actors) {
+    this.actors = actors;
   }
 
 }
