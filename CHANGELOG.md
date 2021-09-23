@@ -4,6 +4,7 @@ History of **restbox** with changes description.
 
 ## Unreleased
 
+- REST API error handling standard
 - Object-relational mapping for whole business model
 - Handle database migrations during launch
 - In memory SQL relational database with persistence layer
