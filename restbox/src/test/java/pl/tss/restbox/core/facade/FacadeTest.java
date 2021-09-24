@@ -30,9 +30,9 @@ public class FacadeTest {
   @Test
   public void isValidProfileTest() {
     String[] firstSet = new String[] { "dev", "test", "invalid" };
-    String[] secondSet = new String[] { "dev", "test", "valid" };
-
     Assertions.assertFalse(facade.isValidProfile(firstSet));
+
+    String[] secondSet = new String[] { "dev", "test", "valid" };
     Assertions.assertTrue(facade.isValidProfile(secondSet));
   }
 
