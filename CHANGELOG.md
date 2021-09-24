@@ -4,6 +4,8 @@ History of **restbox** with changes description.
 
 ## Unreleased
 
+- [POST] Add actor with bugs
+- [POST] Add actor without bugs
 - REST API error handling standard
 - Object-relational mapping for whole business model
 - Handle database migrations during launch
