@@ -62,7 +62,7 @@ public class Movie implements Serializable {
 
   @Id
   @Column(name = "mov_id", nullable = false, unique = true)
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   public int getMovId() {
     return movId;
   }

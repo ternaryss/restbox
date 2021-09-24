@@ -48,7 +48,7 @@ public class Genere implements Serializable {
 
   @Id
   @Column(name = "gen_id", nullable = false, unique = true)
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   public int getGenId() {
     return genId;
   }

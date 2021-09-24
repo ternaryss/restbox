@@ -60,7 +60,7 @@ public class Person implements Serializable {
 
   @Id
   @Column(name = "per_id", nullable = false, unique = true)
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   public int getPerId() {
     return perId;
   }

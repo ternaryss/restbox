@@ -45,7 +45,7 @@ public class Actor implements Serializable {
 
   @Id
   @Column(name = "act_id", nullable = false, unique = true)
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   public int getActId() {
     return actId;
   }
