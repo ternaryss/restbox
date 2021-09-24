@@ -42,7 +42,7 @@ class H2Config {
     builder.url(properties.getUrl());
     builder.username(properties.getUsername());
     builder.password(properties.getPassword());
-    log.debug("H2 configured [builder = {}]", builder);
+    log.debug("H2 configured [builder = {}]", builder.getClass().getSimpleName());
 
     return builder.build();
   }
@@ -64,7 +64,7 @@ class H2Config {
 
     initializer.setDatabasePopulator(populator);
     log.debug("All migrations applied [migrationsSize = {}, initializer = {}]",
-        migrations != null ? migrations.size() : null, initializer);
+        migrations != null ? migrations.size() : null, initializer.getClass().getSimpleName());
 
     return initializer;
   }

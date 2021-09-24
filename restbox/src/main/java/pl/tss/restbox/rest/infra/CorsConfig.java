@@ -19,9 +19,9 @@ class CorsConfig implements WebMvcConfigurer {
 
   @Override
   public void addCorsMappings(CorsRegistry registry) {
-    log.debug("Disabling CORS policy in default registry [registry = {}]", registry);
+    log.debug("Disabling CORS policy in default registry [registry = {}]", registry.getClass().getSimpleName());
     registry.addMapping("/**").allowedMethods("*").allowedHeaders("*").allowedOrigins("*");
-    log.debug("CORS policy disabled in default registry [registry = {}]", registry);
+    log.debug("CORS policy disabled in default registry [registry = {}]", registry.getClass().getSimpleName());
   }
 
 }

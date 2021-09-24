@@ -46,7 +46,7 @@ public class ActorFacade extends Facade {
 
   @Override
   public Cmd<?, ?> execute(Cmd<?, ?> command) {
-    log.info("Executing actor command [command = {}]", command);
+    log.info("Executing actor command [command = {}]", command != null ? command.getClass().getSimpleName() : null);
 
     if (command instanceof AddActorCmd) {
       return addActor((AddActorCmd) command);
