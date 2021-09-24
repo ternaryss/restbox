@@ -25,12 +25,13 @@ public class ValidateNewActorTest {
   public void setup() {
     actor = PersonDto.builder().firstName("Jan").lastName("Kowalski").birthday("1996-08-04T00:00:00+02:00").rate(10)
         .build();
+
     command = new AddActorCmd(actor);
     handler = new ValidateNewActor();
   }
 
   @Test
-  public void noErrorTest() {
+  public void noErrorsTest() {
     Assertions.assertDoesNotThrow(() -> handler.handle(command));
   }
 
@@ -38,6 +39,7 @@ public class ValidateNewActorTest {
   public void firstNameRequiredTest() {
     String field = "firstName";
     String msgCode = "err.actor.first-name.req";
+
     actor.setFirstName(null);
     Assertions.assertThrows(ValidationException.class, () -> handler.handle(command));
 
@@ -54,6 +56,7 @@ public class ValidateNewActorTest {
   public void lastNameRequiredTest() {
     String field = "lastName";
     String msgCode = "err.actor.last-name.req";
+
     actor.setLastName(null);
     Assertions.assertThrows(ValidationException.class, () -> handler.handle(command));
 
@@ -70,6 +73,7 @@ public class ValidateNewActorTest {
   public void birthdayRequiredTest() {
     String field = "birthday";
     String msgCode = "err.actor.birthday.req";
+
     actor.setBirthday(null);
     Assertions.assertThrows(ValidationException.class, () -> handler.handle(command));
 
@@ -86,6 +90,7 @@ public class ValidateNewActorTest {
   public void birthdayFormatTest() {
     String field = "birthday";
     String msgCode = "err.actor.birthday.format";
+
     actor.setBirthday("1996-08-04 00:00:00");
     Assertions.assertThrows(ValidationException.class, () -> handler.handle(command));
 
@@ -102,6 +107,7 @@ public class ValidateNewActorTest {
   public void birthdayInvalidTest() {
     String field = "birthday";
     String msgCode = "err.actor.birthday.invalid";
+
     actor.setBirthday("2100-08-04T00:00:00+02:00");
     Assertions.assertThrows(ValidationException.class, () -> handler.handle(command));
 
@@ -118,6 +124,7 @@ public class ValidateNewActorTest {
   public void rateRequiredTest() {
     String field = "rate";
     String msgCode = "err.actor.rate.req";
+
     actor.setRate(null);
     Assertions.assertThrows(ValidationException.class, () -> handler.handle(command));
 
@@ -134,6 +141,7 @@ public class ValidateNewActorTest {
   public void rateInvalidTest() {
     String field = "rate";
     String msgCode = "err.actor.rate.invalid";
+
     actor.setRate(-1);
     Assertions.assertThrows(ValidationException.class, () -> handler.handle(command));
 
