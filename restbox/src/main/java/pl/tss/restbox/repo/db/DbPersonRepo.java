@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import org.springframework.data.repository.CrudRepository;
@@ -30,6 +31,49 @@ class DbPersonRepo implements PersonRepo {
   public DbPersonRepo(EntityManager entityManager, CrudPersonRepo repo) {
     this.entityManager = entityManager;
     this.repo = repo;
+  }
+
+  @Override
+  public int countByActorsFilter(ActorsFilter filter) {
+    log.debug("Counting persons by actors filter [firstName = {}, lastName = {}, rate = {}]", filter.getFirstName(),
+        filter.getLastName(), filter.getRate());
+
+    Integer count = null;
+    TypedQuery<Integer> query = null;
+    String rawQuery = "select count(actor) from Person actor where actor.act "
+        + "and lower(actor.firstName) like '%' || lower(:firstName) || '%' "
+        + "and lower(actor.lastName) like '%' || lower(:lastName) || '%'";
+
+    if (filter.getRate() != null) {
+      rawQuery = rawQuery + " and actor.rate = :rate";
+      rawQuery = rawQuery + filter.getSortQuery();
+      query = entityManager.createQuery(rawQuery, Integer.class).setParameter("rate", filter.getRate());
+    } else {
+      rawQuery = rawQuery + filter.getSortQuery();
+      query = entityManager.createQuery(rawQuery, Integer.class);
+    }
+
+    if (filter.getFirstName() != null) {
+      query.setParameter("firstName", filter.getFirstName().trim());
+    } else {
+      query.setParameter("firstName", "");
+    }
+
+    if (filter.getLastName() != null) {
+      query.setParameter("lastName", filter.getLastName().trim());
+    } else {
+      query.setParameter("lastName", "");
+    }
+
+    try {
+      count = query.getSingleResult();
+    } catch (NoResultException ex) {
+      count = 0;
+    }
+
+    log.debug("Persons by actors filter count [count = {}]", count);
+
+    return count;
   }
 
   @Override
