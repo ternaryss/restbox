@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 import lombok.Builder;
 import lombok.Data;
+import pl.tss.restbox.core.domain.filter.Sortable;
 
 /**
  * External person representation.
@@ -13,7 +14,7 @@ import lombok.Data;
  */
 @Data
 @JsonDeserialize(builder = PersonDto.PersonDtoBuilder.class)
-public class PersonDto {
+public class PersonDto extends PageableDto {
 
   private Integer perId;
   private String firstName;
@@ -39,6 +40,41 @@ public class PersonDto {
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class PersonDtoBuilder {
+  }
+
+  /**
+   * Definition of sorting for person DTO.
+   */
+  public enum SortColumn implements Sortable {
+
+    PER_ID("perid", "actor.perId"), FIRST_NAME("firstname", "actor.firstName"),
+    SECOND_NAME("secondname", "actor.secondName"), LAST_NAME("lastname", "actor.lastName"),
+    BIRTHDAY("birthday", "actor.birthday"), AGE("age", "actor.age"), RATE("rate", "actor.rate"),
+    ACT("act", "actor.act");
+
+    private final String field;
+    private final String query;
+
+    SortColumn(String field, String query) {
+      this.field = field;
+      this.query = query;
+    }
+
+    @Override
+    public Sortable[] getColumns() {
+      return SortColumn.values();
+    }
+
+    @Override
+    public String getField() {
+      return field;
+    }
+
+    @Override
+    public String getQuery() {
+      return query;
+    }
+
   }
 
 }
