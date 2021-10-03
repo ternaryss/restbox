@@ -2,6 +2,7 @@ package pl.tss.restbox.core.domain.filter;
 
 import java.util.List;
 
+import lombok.Getter;
 import pl.tss.restbox.core.domain.dto.PageDto;
 import pl.tss.restbox.core.domain.dto.PageableDto;
 
@@ -15,7 +16,10 @@ public class Pagination {
   private final static int DEFAULT_PAGE = 1;
   private final static int DEFAULT_PAGE_SIZE = 20;
 
+  @Getter
   private final int page;
+
+  @Getter
   private final int size;
 
   public Pagination() {
