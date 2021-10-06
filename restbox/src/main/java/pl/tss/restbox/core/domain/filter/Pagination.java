@@ -33,10 +33,14 @@ public class Pagination {
   }
 
   private int countPages(int resultSetSize) {
-    int pages = resultSetSize / size;
+    int pages = 0;
 
-    if (resultSetSize % size != 0) {
-      pages = pages + 1;
+    if (size != 0) {
+      pages = resultSetSize / size;
+
+      if (resultSetSize % size != 0) {
+        pages = pages + 1;
+      }
     }
 
     return pages;
