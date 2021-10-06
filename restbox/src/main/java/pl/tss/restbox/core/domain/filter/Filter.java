@@ -1,5 +1,6 @@
 package pl.tss.restbox.core.domain.filter;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -30,6 +31,25 @@ public abstract class Filter {
 
   public void addSort(Sortable column, Sortable.Direction direction) {
     sort.put(column, direction);
+  }
+
+  public void addSort(String sortQuery, Sortable[] sortable) {
+    if (sortQuery != null && !sortQuery.trim().isEmpty()) {
+      String[] sortChunks = sortQuery.split(";");
+
+      for (String sortChunk : sortChunks) {
+        String[] chunks = sortChunk.split(",");
+
+        if (chunks.length == 2) {
+          Sortable column = Arrays.asList(sortable).stream().filter(s -> s.getField().equals(chunks[0].trim()))
+              .findFirst().orElse(null);
+
+          if (column != null) {
+            addSort(column, Sortable.Direction.fromValue(chunks[1].trim()));
+          }
+        }
+      }
+    }
   }
 
   public String getSortQuery() {
