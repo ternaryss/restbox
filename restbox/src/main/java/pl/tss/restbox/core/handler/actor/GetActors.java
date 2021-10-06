@@ -1,5 +1,6 @@
 package pl.tss.restbox.core.handler.actor;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import pl.tss.restbox.core.domain.dto.PageDto;
 import pl.tss.restbox.core.domain.dto.PersonDto;
 import pl.tss.restbox.core.domain.entity.Person;
 import pl.tss.restbox.core.domain.filter.ActorsFilter;
+import pl.tss.restbox.core.domain.filter.Pagination;
 import pl.tss.restbox.core.handler.CommandHandler;
 import pl.tss.restbox.core.port.output.repo.PersonRepo;
 
@@ -30,23 +32,30 @@ public class GetActors extends CommandHandler {
   @Override
   public Cmd<?, ?> handle(Cmd<?, ?> command) {
     ActorsFilter filter = ((GetActorsCmd) command).getInput();
-    log.info(
-        "Getting actors for filters [firstName = {}, lastName = {}, rate = {}, page = {}, size = {}, sortSize = {}",
-        filter.getFirstName(), filter.getLastName(), filter.getRate(), filter.getPagination().getPage(),
-        filter.getPagination().getSize(), filter.getSort().size());
-
-    List<Person> actors = personRepo.findByActorsFilter(filter);
-    int countedActors = personRepo.countByActorsFilter(filter);
+    Pagination pagination = filter.getPagination();
     List<PersonDto> actorsDto = new LinkedList<>();
+    PageDto page = null;
+    log.info(
+        "Getting actors for filters [firstName = {}, lastName = {}, rate = {}, page = {}, size = {}, sortSize = {}]",
+        filter.getFirstName(), filter.getLastName(), filter.getRate(), pagination.getPage(), pagination.getSize(),
+        filter.getSort().size());
 
-    for (Person actor : actors) {
-      actorsDto.add(
-          PersonDto.builder().perId(actor.getPerId()).firstName(actor.getFirstName()).secondName(actor.getSecondName())
-              .lastName(actor.getLastName()).birthday(actor.getBirthday().withNano(0).toString()).age(actor.getAge())
-              .rate(actor.getRate()).act(actor.isAct()).build());
+    if ((pagination.getPage() <= 0) || (pagination.getSize() <= 0)) {
+      page = pagination.generatePage(0, actorsDto);
+    } else {
+      List<Person> actors = personRepo.findByActorsFilter(filter);
+      int countedActors = personRepo.countByActorsFilter(filter);
+
+      for (Person actor : actors) {
+        actorsDto.add(PersonDto.builder().perId(actor.getPerId()).firstName(actor.getFirstName())
+            .secondName(actor.getSecondName()).lastName(actor.getLastName())
+            .birthday(actor.getBirthday().withNano(0).toString()).age(actor.getAge()).rate(actor.getRate())
+            .act(actor.isAct()).build());
+      }
+
+      page = filter.getPagination().generatePage(countedActors, actorsDto);
     }
 
-    PageDto page = filter.getPagination().generatePage(countedActors, actorsDto);
     ((GetActorsCmd) command).setOutput(page);
     log.info("Actors for filter got [actorsSize = {}]", actorsDto.size());
 
