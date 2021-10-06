@@ -6,9 +6,12 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 import pl.tss.restbox.core.domain.command.Cmd;
 import pl.tss.restbox.core.domain.command.actor.AddActorCmd;
+import pl.tss.restbox.core.domain.command.actor.GetActorsCmd;
 import pl.tss.restbox.core.handler.CommandHandler;
 import pl.tss.restbox.core.handler.actor.AddActor;
 import pl.tss.restbox.core.handler.actor.BadAddActor;
+import pl.tss.restbox.core.handler.actor.BadGetActors;
+import pl.tss.restbox.core.handler.actor.GetActors;
 import pl.tss.restbox.core.handler.actor.ValidateNewActor;
 import pl.tss.restbox.core.port.output.repo.PersonRepo;
 
@@ -43,12 +46,26 @@ public class ActorFacade extends Facade {
     return h1.handle(command);
   }
 
+  private Cmd<?, ?> getActors(GetActorsCmd command) {
+    CommandHandler h1 = null;
+
+    if (super.isValidProfile()) {
+      h1 = new GetActors(personRepo);
+    } else {
+      h1 = new BadGetActors(personRepo);
+    }
+
+    return h1.handle(command);
+  }
+
   @Override
   public Cmd<?, ?> execute(Cmd<?, ?> command) {
     log.info("Executing actor command [command = {}]", command != null ? command.getClass().getSimpleName() : null);
 
     if (command instanceof AddActorCmd) {
       return addActor((AddActorCmd) command);
+    } else if (command instanceof GetActorsCmd) {
+      return getActors((GetActorsCmd) command);
     } else {
       throw new UnsupportedOperationException("Unknown actor command");
     }
