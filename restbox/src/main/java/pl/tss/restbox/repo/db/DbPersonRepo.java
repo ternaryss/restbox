@@ -38,19 +38,17 @@ class DbPersonRepo implements PersonRepo {
     log.debug("Counting persons by actors filter [firstName = {}, lastName = {}, rate = {}]", filter.getFirstName(),
         filter.getLastName(), filter.getRate());
 
-    Integer count = null;
-    TypedQuery<Integer> query = null;
-    String rawQuery = "select count(actor) from Person actor where actor.act "
+    Long count = 0l;
+    TypedQuery<Long> query = null;
+    String rawQuery = "select count(actor) from Person actor where actor.act = true "
         + "and lower(actor.firstName) like '%' || lower(:firstName) || '%' "
         + "and lower(actor.lastName) like '%' || lower(:lastName) || '%'";
 
     if (filter.getRate() != null) {
       rawQuery = rawQuery + " and actor.rate = :rate";
-      rawQuery = rawQuery + filter.getSortQuery();
-      query = entityManager.createQuery(rawQuery, Integer.class).setParameter("rate", filter.getRate());
+      query = entityManager.createQuery(rawQuery, Long.class).setParameter("rate", filter.getRate());
     } else {
-      rawQuery = rawQuery + filter.getSortQuery();
-      query = entityManager.createQuery(rawQuery, Integer.class);
+      query = entityManager.createQuery(rawQuery, Long.class);
     }
 
     if (filter.getFirstName() != null) {
@@ -68,12 +66,12 @@ class DbPersonRepo implements PersonRepo {
     try {
       count = query.getSingleResult();
     } catch (NoResultException ex) {
-      count = 0;
+      count = 0l;
     }
 
     log.debug("Persons by actors filter count [count = {}]", count);
 
-    return count;
+    return count.intValue();
   }
 
   @Override
