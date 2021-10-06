@@ -3,6 +3,10 @@ package pl.tss.restbox.core.facade;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.springframework.core.env.Environment;
 
 import pl.tss.restbox.core.domain.command.Cmd;
 
@@ -15,9 +19,14 @@ public class FacadeTest {
 
   private Facade facade;
 
+  @Mock
+  private Environment env;
+
   @BeforeEach
   public void setup() {
-    facade = new Facade() {
+    MockitoAnnotations.initMocks(this);
+
+    facade = new Facade(env) {
 
       @Override
       public Cmd<?, ?> execute(Cmd<?, ?> command) {
@@ -30,10 +39,12 @@ public class FacadeTest {
   @Test
   public void isValidProfileTest() {
     String[] firstSet = new String[] { "dev", "test", "invalid" };
-    Assertions.assertFalse(facade.isValidProfile(firstSet));
+    Mockito.when(env.getActiveProfiles()).thenReturn(firstSet);
+    Assertions.assertFalse(facade.isValidProfile());
 
     String[] secondSet = new String[] { "dev", "test", "valid" };
-    Assertions.assertTrue(facade.isValidProfile(secondSet));
+    Mockito.when(env.getActiveProfiles()).thenReturn(secondSet);
+    Assertions.assertTrue(facade.isValidProfile());
   }
 
 }

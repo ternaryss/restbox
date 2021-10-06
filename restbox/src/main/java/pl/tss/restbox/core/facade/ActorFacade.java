@@ -21,11 +21,10 @@ import pl.tss.restbox.core.port.output.repo.PersonRepo;
 @Service
 public class ActorFacade extends Facade {
 
-  private final Environment env;
   private final PersonRepo personRepo;
 
   public ActorFacade(Environment env, PersonRepo personRepo) {
-    this.env = env;
+    super(env);
     this.personRepo = personRepo;
   }
 
@@ -33,7 +32,7 @@ public class ActorFacade extends Facade {
     CommandHandler h1 = new ValidateNewActor();
     CommandHandler h2 = null;
 
-    if (super.isValidProfile(env.getActiveProfiles())) {
+    if (super.isValidProfile()) {
       h2 = new AddActor(personRepo);
     } else {
       h2 = new BadAddActor(personRepo);
