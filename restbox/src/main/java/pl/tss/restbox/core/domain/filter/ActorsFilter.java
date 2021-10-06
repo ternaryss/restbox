@@ -25,7 +25,7 @@ public class ActorsFilter extends Filter {
     this.rate = rate;
   }
 
-  public ActorsFilter(String firstName, String lastName, Integer rate, int page, int pageSize) {
+  public ActorsFilter(String firstName, String lastName, Integer rate, Integer page, Integer pageSize) {
     super(page, pageSize);
     this.firstName = firstName;
     this.lastName = lastName;

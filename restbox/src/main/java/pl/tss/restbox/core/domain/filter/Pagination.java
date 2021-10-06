@@ -27,9 +27,9 @@ public class Pagination {
     this.size = DEFAULT_PAGE_SIZE;
   }
 
-  public Pagination(int page, int size) {
-    this.page = page;
-    this.size = size;
+  public Pagination(Integer page, Integer size) {
+    this.page = page != null ? page : DEFAULT_PAGE;
+    this.size = size != null ? size : DEFAULT_PAGE_SIZE;
   }
 
   private int countPages(int resultSetSize) {

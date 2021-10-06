@@ -23,7 +23,7 @@ public abstract class Filter {
     this.sort = new LinkedHashMap<>();
   }
 
-  public Filter(int page, int pageSize) {
+  public Filter(Integer page, Integer pageSize) {
     this.pagination = new Pagination(page, pageSize);
     this.sort = new LinkedHashMap<>();
   }
