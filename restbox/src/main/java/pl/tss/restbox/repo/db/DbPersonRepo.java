@@ -85,7 +85,7 @@ class DbPersonRepo implements PersonRepo {
         filter.getSortQuery());
 
     TypedQuery<Person> query = null;
-    String rawQuery = "select actor from Person actor where actor.act "
+    String rawQuery = "select actor from Person actor where actor.act = true "
         + "and lower(actor.firstName) like '%' || lower(:firstName) || '%' "
         + "and lower(actor.lastName) like '%' || lower(:lastName) || '%'";
 
