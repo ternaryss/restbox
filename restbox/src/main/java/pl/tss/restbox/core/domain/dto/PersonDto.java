@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import pl.tss.restbox.core.domain.filter.Sortable;
 
 /**
@@ -13,6 +14,7 @@ import pl.tss.restbox.core.domain.filter.Sortable;
  * @author TSS
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @JsonDeserialize(builder = PersonDto.PersonDtoBuilder.class)
 public class PersonDto extends PageableDto {
 
