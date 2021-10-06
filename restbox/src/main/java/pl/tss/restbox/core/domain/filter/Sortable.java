@@ -1,5 +1,7 @@
 package pl.tss.restbox.core.domain.filter;
 
+import java.util.Arrays;
+
 import lombok.Getter;
 
 /**
@@ -29,6 +31,11 @@ public interface Sortable {
 
     Direction(String value) {
       this.value = value;
+    }
+
+    public static Direction fromValue(String val) {
+      return Arrays.asList(Direction.values()).stream().filter(d -> d.getValue().equals(val)).findFirst()
+          .orElse(Direction.ASCENDING);
     }
 
   }
