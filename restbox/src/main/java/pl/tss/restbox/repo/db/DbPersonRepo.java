@@ -34,11 +34,11 @@ class DbPersonRepo implements PersonRepo {
   }
 
   @Override
-  public int countByActorsFilter(ActorsFilter filter) {
+  public long countByActorsFilter(ActorsFilter filter) {
     log.debug("Counting persons by actors filter [firstName = {}, lastName = {}, rate = {}]", filter.getFirstName(),
         filter.getLastName(), filter.getRate());
 
-    Long count = 0l;
+    long count = 0;
     TypedQuery<Long> query = null;
     String rawQuery = "select count(actor) from Person actor where actor.act = true "
         + "and lower(actor.firstName) like '%' || lower(:firstName) || '%' "
@@ -66,12 +66,12 @@ class DbPersonRepo implements PersonRepo {
     try {
       count = query.getSingleResult();
     } catch (NoResultException ex) {
-      count = 0l;
+      count = 0;
     }
 
     log.debug("Persons by actors filter count [count = {}]", count);
 
-    return count.intValue();
+    return count;
   }
 
   @Override

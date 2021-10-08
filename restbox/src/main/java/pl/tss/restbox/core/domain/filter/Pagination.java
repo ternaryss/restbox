@@ -32,21 +32,21 @@ public class Pagination {
     this.size = size != null ? size : DEFAULT_PAGE_SIZE;
   }
 
-  private int countPages(int resultSetSize) {
-    int pages = 0;
+  private int countPages(long resultSetSize) {
+    long pages = 0;
 
     if (size != 0) {
-      pages = resultSetSize / size;
+      pages = resultSetSize / Long.valueOf(size);
 
       if (resultSetSize % size != 0) {
         pages = pages + 1;
       }
     }
 
-    return pages;
+    return (int) pages;
   }
 
-  public PageDto generatePage(int resultSetSize, List<? extends PageableDto> content) {
+  public PageDto generatePage(long resultSetSize, List<? extends PageableDto> content) {
     return PageDto.builder().page(page).size(size).pages(countPages(resultSetSize)).content(content).build();
   }
 

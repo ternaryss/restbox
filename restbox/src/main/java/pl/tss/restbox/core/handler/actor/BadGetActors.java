@@ -53,7 +53,7 @@ public class BadGetActors extends CommandHandler {
       }
 
       List<Person> actors = personRepo.findByActorsFilter(badFilter);
-      int countedActors = personRepo.countByActorsFilter(badFilter);
+      long countedActors = personRepo.countByActorsFilter(badFilter);
 
       for (Person actor : actors) {
         actorsDto.add(PersonDto.builder().perId(actor.getPerId()).firstName(actor.getFirstName())

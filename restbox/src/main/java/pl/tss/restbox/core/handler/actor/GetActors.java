@@ -43,7 +43,7 @@ public class GetActors extends CommandHandler {
       page = pagination.generatePage(0, actorsDto);
     } else {
       List<Person> actors = personRepo.findByActorsFilter(filter);
-      int countedActors = personRepo.countByActorsFilter(filter);
+      long countedActors = personRepo.countByActorsFilter(filter);
 
       for (Person actor : actors) {
         actorsDto.add(PersonDto.builder().perId(actor.getPerId()).firstName(actor.getFirstName())

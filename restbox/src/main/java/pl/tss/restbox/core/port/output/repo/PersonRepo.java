@@ -12,7 +12,7 @@ import pl.tss.restbox.core.domain.filter.ActorsFilter;
  */
 public interface PersonRepo {
 
-  int countByActorsFilter(ActorsFilter filter);
+  long countByActorsFilter(ActorsFilter filter);
 
   List<Person> findByActorsFilter(ActorsFilter filter);
 
