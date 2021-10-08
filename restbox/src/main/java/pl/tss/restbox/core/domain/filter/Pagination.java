@@ -38,7 +38,7 @@ public class Pagination {
     long pages = 0;
     log.debug("Counting pages [resultSetSize = {}, pageSize = {}]", resultSetSize, size);
 
-    if (size != 0) {
+    if (size > 0 && resultSetSize > 0) {
       pages = resultSetSize / Long.valueOf(size);
 
       if (resultSetSize % size != 0) {
