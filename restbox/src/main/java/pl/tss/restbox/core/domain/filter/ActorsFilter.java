@@ -18,6 +18,13 @@ public class ActorsFilter extends Filter {
   @Getter
   private final Integer rate;
 
+  public ActorsFilter() {
+    super();
+    this.firstName = null;
+    this.lastName = null;
+    this.rate = null;
+  }
+
   public ActorsFilter(String firstName, String lastName, Integer rate) {
     super();
     this.firstName = firstName;

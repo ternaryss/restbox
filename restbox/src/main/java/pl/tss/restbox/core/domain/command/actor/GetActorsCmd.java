@@ -12,7 +12,7 @@ import pl.tss.restbox.core.domain.filter.ActorsFilter;
 public class GetActorsCmd extends Cmd<ActorsFilter, PageDto> {
 
   public GetActorsCmd() {
-    super(new ActorsFilter(null, null, null));
+    super(new ActorsFilter());
   }
 
   public GetActorsCmd(ActorsFilter filter) {
