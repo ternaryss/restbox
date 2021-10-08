@@ -51,8 +51,7 @@ public class PersonDto extends PageableDto {
 
     PER_ID("perid", "actor.perId"), FIRST_NAME("firstname", "actor.firstName"),
     SECOND_NAME("secondname", "actor.secondName"), LAST_NAME("lastname", "actor.lastName"),
-    BIRTHDAY("birthday", "actor.birthday"), AGE("age", "actor.age"), RATE("rate", "actor.rate"),
-    ACT("act", "actor.act");
+    BIRTHDAY("birthday", "actor.birthday"), RATE("rate", "actor.rate"), ACT("act", "actor.act");
 
     private final String field;
     private final String query;
