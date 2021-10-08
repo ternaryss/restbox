@@ -5,12 +5,14 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Overall result set filter definition.
  *
  * @author TSS
  */
+@Slf4j
 public abstract class Filter {
 
   @Getter
@@ -34,6 +36,8 @@ public abstract class Filter {
   }
 
   public void addSort(String sortQuery, Sortable[] sortable) {
+    log.debug("Adding sort based on sort query [sortQuery = '{}', sortableSize = {}]", sortQuery, sortable.length);
+
     if (sortQuery != null && !sortQuery.trim().isEmpty()) {
       String[] sortChunks = sortQuery.split(";");
 
@@ -45,11 +49,17 @@ public abstract class Filter {
               .findFirst().orElse(null);
 
           if (column != null) {
-            addSort(column, Sortable.Direction.fromValue(chunks[1].trim()));
+            Sortable.Direction direction = Sortable.Direction.fromValue(chunks[1].trim());
+            addSort(column, direction);
+
+            log.debug("Single sort params based on sort query parsed [colum = {}, direction = {}]", column.name(),
+                direction.name());
           }
         }
       }
     }
+
+    log.debug("Sort based on sort query added [sortSize = {}]", sort.size());
   }
 
   public String getSortQuery() {

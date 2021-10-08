@@ -19,6 +19,8 @@ public interface Sortable {
 
   String getQuery();
 
+  String name();
+
   /**
    * Sortable direction.
    */

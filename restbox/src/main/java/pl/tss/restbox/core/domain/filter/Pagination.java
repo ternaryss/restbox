@@ -3,6 +3,7 @@ package pl.tss.restbox.core.domain.filter;
 import java.util.List;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import pl.tss.restbox.core.domain.dto.PageDto;
 import pl.tss.restbox.core.domain.dto.PageableDto;
 
@@ -11,6 +12,7 @@ import pl.tss.restbox.core.domain.dto.PageableDto;
  *
  * @author TSS
  */
+@Slf4j
 public class Pagination {
 
   private final static int DEFAULT_PAGE = 1;
@@ -34,6 +36,7 @@ public class Pagination {
 
   private int countPages(long resultSetSize) {
     long pages = 0;
+    log.debug("Counting pages [resultSetSize = {}, pageSize = {}]", resultSetSize, size);
 
     if (size != 0) {
       pages = resultSetSize / Long.valueOf(size);
@@ -42,6 +45,8 @@ public class Pagination {
         pages = pages + 1;
       }
     }
+
+    log.debug("Pages count [pages = {}]", pages);
 
     return (int) pages;
   }
