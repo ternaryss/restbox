@@ -14,10 +14,10 @@ import lombok.Getter;
 public abstract class Filter {
 
   @Getter
-  private final Map<Sortable, Sortable.Direction> sort;
+  private final Pagination pagination;
 
   @Getter
-  private final Pagination pagination;
+  private final Map<Sortable, Sortable.Direction> sort;
 
   public Filter() {
     this.pagination = new Pagination();
