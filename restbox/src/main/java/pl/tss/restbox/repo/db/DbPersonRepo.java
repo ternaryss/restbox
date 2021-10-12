@@ -40,7 +40,7 @@ class DbPersonRepo implements PersonRepo {
 
     long count = 0;
     TypedQuery<Long> query = null;
-    String rawQuery = "select count(actor) from Person actor where actor.act = true "
+    String rawQuery = "select count(actor) from Person actor where actor.act = true and actor.director = false "
         + "and lower(actor.firstName) like '%' || lower(:firstName) || '%' "
         + "and lower(actor.lastName) like '%' || lower(:lastName) || '%'";
 
@@ -83,7 +83,7 @@ class DbPersonRepo implements PersonRepo {
         filter.getSortQuery());
 
     TypedQuery<Person> query = null;
-    String rawQuery = "select actor from Person actor where actor.act = true "
+    String rawQuery = "select actor from Person actor where actor.act = true and actor.director = false "
         + "and lower(actor.firstName) like '%' || lower(:firstName) || '%' "
         + "and lower(actor.lastName) like '%' || lower(:lastName) || '%'";
 
