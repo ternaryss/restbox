@@ -4,6 +4,8 @@ History of **restbox** with changes description.
 
 ## Unreleased
 
+- [GET] Get acotrs with bugs
+- [GET] Get actors without bugs
 - [POST] Add actor with bugs
 - [POST] Add actor without bugs
 - REST API error handling standard
