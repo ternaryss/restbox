@@ -2,6 +2,7 @@ package pl.tss.restbox.rest.controller;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
 import pl.tss.restbox.core.domain.command.actor.AddActorCmd;
+import pl.tss.restbox.core.domain.command.actor.EditActorCmd;
 import pl.tss.restbox.core.domain.command.actor.GetActorsCmd;
 import pl.tss.restbox.core.domain.dto.PageDto;
 import pl.tss.restbox.core.domain.dto.PersonDto;
@@ -38,9 +40,21 @@ class RestActorController implements ActorController<ResponseEntity<?>> {
   public ResponseEntity<Integer> addActor(@RequestBody PersonDto payload) {
     log.debug("Adding actor [payload = {}]", payload);
     AddActorCmd command = (AddActorCmd) actorFacade.execute(new AddActorCmd(payload));
-    log.debug("Actor added [actId = {}]", command.getOutput());
+    log.debug("Actor added [perId = {}]", command.getOutput());
 
     return ResponseEntity.status(201).body(command.getOutput());
+  }
+
+  @Override
+  @RequestMapping(path = "/{perId}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<PersonDto> editActor(@PathVariable(name = "perId") Integer perId,
+      @RequestBody PersonDto payload) {
+    log.debug("Modifiying actor [perId = {}]", perId);
+    payload.setPerId(perId);
+    EditActorCmd command = (EditActorCmd) actorFacade.execute(new EditActorCmd(payload));
+    log.debug("Actor modifed [perId = {}]", command.getOutput().getPerId());
+
+    return ResponseEntity.status(200).body(command.getOutput());
   }
 
   @Override
