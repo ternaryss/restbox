@@ -28,7 +28,7 @@ public class BadEditActor extends CommandHandler {
   public Cmd<?, ?> handle(Cmd<?, ?> command) {
     PersonDto input = ((EditActorCmd) command).getInput();
     Person actor = personRepo.findFirstByPerIdAndDirector(input.getPerId(), false);
-    log.info("Modyfing actor [perId = {}]", actor.getPerId());
+    log.info("Modifying actor [perId = {}]", actor.getPerId());
 
     OffsetDateTime birthday = OffsetDateTime.parse(input.getBirthday());
     actor.setFirstName(input.getFirstName().trim());
