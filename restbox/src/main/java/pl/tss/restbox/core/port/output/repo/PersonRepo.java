@@ -16,6 +16,8 @@ public interface PersonRepo {
 
   List<Person> findByActorsFilter(ActorsFilter filter);
 
+  Person findFirstByPerIdAndDirector(Integer perId, boolean director);
+
   Person save(Person person);
 
 }
