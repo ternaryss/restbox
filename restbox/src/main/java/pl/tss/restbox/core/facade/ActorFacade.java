@@ -6,12 +6,16 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 import pl.tss.restbox.core.domain.command.Cmd;
 import pl.tss.restbox.core.domain.command.actor.AddActorCmd;
+import pl.tss.restbox.core.domain.command.actor.EditActorCmd;
 import pl.tss.restbox.core.domain.command.actor.GetActorsCmd;
 import pl.tss.restbox.core.handler.CommandHandler;
 import pl.tss.restbox.core.handler.actor.AddActor;
 import pl.tss.restbox.core.handler.actor.BadAddActor;
+import pl.tss.restbox.core.handler.actor.BadEditActor;
 import pl.tss.restbox.core.handler.actor.BadGetActors;
+import pl.tss.restbox.core.handler.actor.EditActor;
 import pl.tss.restbox.core.handler.actor.GetActors;
+import pl.tss.restbox.core.handler.actor.ValidateActorExists;
 import pl.tss.restbox.core.handler.actor.ValidateNewActor;
 import pl.tss.restbox.core.port.output.repo.PersonRepo;
 
@@ -46,6 +50,23 @@ public class ActorFacade extends Facade {
     return h1.handle(command);
   }
 
+  private Cmd<?, ?> editActor(EditActorCmd command) {
+    CommandHandler h1 = new ValidateActorExists(personRepo);
+    CommandHandler h2 = new ValidateNewActor();
+    CommandHandler h3 = null;
+
+    if (super.isValidProfile()) {
+      h3 = new EditActor(personRepo);
+    } else {
+      h3 = new BadEditActor(personRepo);
+    }
+
+    h1.setNext(h2);
+    h2.setNext(h3);
+
+    return h1.handle(command);
+  }
+
   private Cmd<?, ?> getActors(GetActorsCmd command) {
     CommandHandler h1 = null;
 
@@ -64,6 +85,8 @@ public class ActorFacade extends Facade {
 
     if (command instanceof AddActorCmd) {
       return addActor((AddActorCmd) command);
+    } else if (command instanceof EditActorCmd) {
+      return editActor((EditActorCmd) command);
     } else if (command instanceof GetActorsCmd) {
       return getActors((GetActorsCmd) command);
     } else {
