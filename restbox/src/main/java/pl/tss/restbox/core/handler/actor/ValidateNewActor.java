@@ -6,7 +6,6 @@ import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 import pl.tss.restbox.core.domain.command.Cmd;
-import pl.tss.restbox.core.domain.command.actor.AddActorCmd;
 import pl.tss.restbox.core.domain.dto.ApiErrDetails;
 import pl.tss.restbox.core.domain.dto.PersonDto;
 import pl.tss.restbox.core.domain.exception.ValidationException;
