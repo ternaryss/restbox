@@ -119,7 +119,17 @@ class DbPersonRepo implements PersonRepo {
   @Override
   public Person findFirstByPerIdAndDirector(Integer perId, boolean director) {
     log.debug("Searching for person [perId = {}, director = {}]", perId, director);
-    Person person = repo.findFirstByPerIdAndDirectorAndAct(perId, director, true);
+    Person person = null;
+    String query = "select distinct per from Person per join fetch per.actors where per.perId = :perId "
+        + "and per.director = :director and per.act = :act";
+
+    try {
+      person = entityManager.createQuery(query, Person.class).setParameter("perId", perId)
+          .setParameter("director", director).setParameter("act", true).getSingleResult();
+    } catch (NoResultException ex) {
+      person = null;
+    }
+
     log.debug("Person found [perId = {}]", person != null ? person.getPerId() : null);
 
     return person;
@@ -138,8 +148,6 @@ class DbPersonRepo implements PersonRepo {
    * Nested person repository.
    */
   private interface CrudPersonRepo extends CrudRepository<Person, Integer> {
-
-    Person findFirstByPerIdAndDirectorAndAct(Integer perId, boolean director, boolean act);
 
   }
 
