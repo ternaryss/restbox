@@ -29,7 +29,7 @@ public class ValidateActorExists extends CommandHandler {
 
   @Override
   public Cmd<?, ?> handle(Cmd<?, ?> command) {
-    PersonDto input = ((EditActorCmd) command).getInput();
+    PersonDto input = (PersonDto) command.getInput();
     List<ApiErrDetails> errors = new LinkedList<>();
     log.info("Validating if actor exists [perId = {}]", input.getPerId());
 

@@ -22,7 +22,7 @@ public class ValidateNewActor extends CommandHandler {
 
   @Override
   public Cmd<?, ?> handle(Cmd<?, ?> command) {
-    PersonDto input = ((AddActorCmd) command).getInput();
+    PersonDto input = (PersonDto) command.getInput();
     List<ApiErrDetails> errors = new LinkedList<>();
     log.info("Validating new actor data [firstName = {}, lastName = {}]", input.getFirstName(), input.getLastName());
 
