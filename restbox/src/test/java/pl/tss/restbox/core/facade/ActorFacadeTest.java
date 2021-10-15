@@ -13,6 +13,7 @@ import org.springframework.core.env.Environment;
 
 import pl.tss.restbox.core.domain.command.Cmd;
 import pl.tss.restbox.core.domain.command.actor.AddActorCmd;
+import pl.tss.restbox.core.domain.command.actor.EditActorCmd;
 import pl.tss.restbox.core.domain.command.actor.GetActorsCmd;
 import pl.tss.restbox.core.domain.dto.PersonDto;
 import pl.tss.restbox.core.domain.entity.Person;
@@ -100,6 +101,64 @@ public class ActorFacadeTest {
 
     Mockito.when(env.getActiveProfiles()).thenReturn(new String[] { "valid" });
     Assertions.assertEquals(1, ((AddActorCmd) actorFacade.execute(new AddActorCmd(validActor))).getOutput());
+  }
+
+  @Test
+  public void editActorTest() {
+    PersonDto invalidActor = PersonDto.builder().build();
+    Mockito.when(env.getActiveProfiles()).thenReturn(new String[] { "valid" });
+    Assertions.assertThrows(ValidationException.class, () -> actorFacade.execute(new EditActorCmd(invalidActor)));
+
+    Mockito.when(personRepo.findFirstByPerIdAndDirector(1, false)).thenReturn(mockedActors[0]);
+    Assertions.assertThrows(ValidationException.class, () -> actorFacade.execute(new EditActorCmd(invalidActor)));
+
+    Person mockedActor = new Person("Tom", "Cruise", OffsetDateTime.parse("1962-07-03T00:00:00+02:00"), 10, false);
+    mockedActor.setPerId(10);
+
+    Person modifiedActor = new Person("Mot", "Esiurc", OffsetDateTime.parse("1999-07-03T00:00:00+02:00"), 1, false);
+    modifiedActor.setPerId(10);
+    modifiedActor.setSecondName("Test");
+
+    PersonDto payload = PersonDto.builder().perId(10).firstName("Mot").secondName("Test").lastName("Esiurc")
+        .birthday("1999-07-03T00:00+02:00").rate(1).act(true).build();
+
+    Mockito.when(personRepo.findFirstByPerIdAndDirector(10, false)).thenReturn(mockedActor);
+    Mockito.when(personRepo.save(Mockito.any())).thenReturn(modifiedActor);
+
+    EditActorCmd command = new EditActorCmd(payload);
+    command = (EditActorCmd) actorFacade.execute(command);
+
+    Assertions.assertEquals(payload.getPerId(), command.getOutput().getPerId());
+    Assertions.assertEquals(payload.getFirstName(), command.getOutput().getFirstName());
+    Assertions.assertEquals(payload.getSecondName(), command.getOutput().getSecondName());
+    Assertions.assertEquals(payload.getLastName(), command.getOutput().getLastName());
+    Assertions.assertEquals(payload.getBirthday(), command.getOutput().getBirthday());
+    Assertions.assertEquals(payload.getRate(), command.getOutput().getRate());
+    Assertions.assertEquals(payload.getAct(), command.getOutput().getAct());
+
+    Mockito.when(env.getActiveProfiles()).thenReturn(new String[] { "invalid" });
+    Assertions.assertThrows(ValidationException.class, () -> actorFacade.execute(new EditActorCmd(invalidActor)));
+
+    Mockito.when(personRepo.findFirstByPerIdAndDirector(1, false)).thenReturn(mockedActors[0]);
+    Assertions.assertThrows(ValidationException.class, () -> actorFacade.execute(new EditActorCmd(invalidActor)));
+
+    modifiedActor.setAct(false);
+
+    payload.setAct(false);
+
+    Mockito.when(personRepo.findFirstByPerIdAndDirector(10, false)).thenReturn(mockedActor);
+    Mockito.when(personRepo.save(Mockito.any())).thenReturn(modifiedActor);
+
+    command = new EditActorCmd(payload);
+    command = (EditActorCmd) actorFacade.execute(command);
+
+    Assertions.assertEquals(payload.getPerId(), command.getOutput().getPerId());
+    Assertions.assertEquals(payload.getFirstName(), command.getOutput().getFirstName());
+    Assertions.assertEquals(payload.getSecondName(), command.getOutput().getSecondName());
+    Assertions.assertEquals(payload.getLastName(), command.getOutput().getLastName());
+    Assertions.assertEquals(payload.getBirthday(), command.getOutput().getBirthday());
+    Assertions.assertEquals(payload.getRate(), command.getOutput().getRate());
+    Assertions.assertEquals(payload.getAct(), command.getOutput().getAct());
   }
 
   @Test
