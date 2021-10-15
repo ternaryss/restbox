@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 import pl.tss.restbox.core.domain.command.Cmd;
 import pl.tss.restbox.core.domain.command.actor.AddActorCmd;
+import pl.tss.restbox.core.domain.command.actor.DeleteActorCmd;
 import pl.tss.restbox.core.domain.command.actor.EditActorCmd;
 import pl.tss.restbox.core.domain.command.actor.GetActorsCmd;
 import pl.tss.restbox.core.handler.CommandHandler;
@@ -13,10 +14,12 @@ import pl.tss.restbox.core.handler.actor.AddActor;
 import pl.tss.restbox.core.handler.actor.BadAddActor;
 import pl.tss.restbox.core.handler.actor.BadEditActor;
 import pl.tss.restbox.core.handler.actor.BadGetActors;
+import pl.tss.restbox.core.handler.actor.DeleteActor;
 import pl.tss.restbox.core.handler.actor.EditActor;
 import pl.tss.restbox.core.handler.actor.GetActors;
 import pl.tss.restbox.core.handler.actor.ValidateActorExists;
 import pl.tss.restbox.core.handler.actor.ValidateNewActor;
+import pl.tss.restbox.core.port.output.repo.ActorRepo;
 import pl.tss.restbox.core.port.output.repo.PersonRepo;
 
 /**
@@ -28,10 +31,12 @@ import pl.tss.restbox.core.port.output.repo.PersonRepo;
 @Service
 public class ActorFacade extends Facade {
 
+  private final ActorRepo actorRepo;
   private final PersonRepo personRepo;
 
-  public ActorFacade(Environment env, PersonRepo personRepo) {
+  public ActorFacade(Environment env, ActorRepo actorRepo, PersonRepo personRepo) {
     super(env);
+    this.actorRepo = actorRepo;
     this.personRepo = personRepo;
   }
 
@@ -46,6 +51,17 @@ public class ActorFacade extends Facade {
     }
 
     h1.setNext(h2);
+
+    return h1.handle(command);
+  }
+
+  private Cmd<?, ?> deleteActor(DeleteActorCmd command) {
+    CommandHandler h1 = new ValidateActorExists(personRepo);
+    CommandHandler h2 = new DeleteActor(actorRepo, personRepo);
+
+    if (super.isValidProfile()) {
+      h1.setNext(h2);
+    }
 
     return h1.handle(command);
   }
@@ -85,6 +101,8 @@ public class ActorFacade extends Facade {
 
     if (command instanceof AddActorCmd) {
       return addActor((AddActorCmd) command);
+    } else if (command instanceof DeleteActorCmd) {
+      return deleteActor((DeleteActorCmd) command);
     } else if (command instanceof EditActorCmd) {
       return editActor((EditActorCmd) command);
     } else if (command instanceof GetActorsCmd) {
