@@ -25,7 +25,7 @@ class DbGenereRepo implements GenereRepo {
   @Override
   public Genere findFirstByNameIgnoreCase(String name) {
     log.debug("Searching for genere [name = {}]", name);
-    Genere genere = repo.findFirstByNameIgnoreCaseAndAct(name != null ? name.trim() : null, true);
+    Genere genere = repo.findFirstByNameIgnoreCaseAndAct(name, true);
     log.debug("Genere found [genId = {}]", genere != null ? genere.getGenId() : null);
 
     return genere;
