@@ -1,5 +1,6 @@
 package pl.tss.restbox.repo.db;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
@@ -27,6 +28,7 @@ class DbActorRepo implements ActorRepo {
   @Override
   public void saveAll(List<Actor> rolesAssignment) {
     log.debug("Saving all roles assignment [rolesAssignment size = {}]", rolesAssignment.size());
+    rolesAssignment.forEach(rol -> rol.setModifyDate(OffsetDateTime.now()));
     repo.saveAll(rolesAssignment);
     log.debug("All roles assignment saved [rolesAssignment size = {}]", rolesAssignment.size());
   }

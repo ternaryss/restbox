@@ -1,5 +1,6 @@
 package pl.tss.restbox.repo.db;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -138,6 +139,7 @@ class DbPersonRepo implements PersonRepo {
   @Override
   public Person save(Person person) {
     log.debug("Saving person [perId = {}]", person.getPerId());
+    person.setModifyDate(OffsetDateTime.now());
     person = repo.save(person);
     log.debug("Person saved [perId = {}]", person.getPerId());
 
