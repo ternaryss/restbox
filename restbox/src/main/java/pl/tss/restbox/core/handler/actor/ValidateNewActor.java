@@ -6,6 +6,8 @@ import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 import pl.tss.restbox.core.domain.command.Cmd;
+import pl.tss.restbox.core.domain.command.actor.AddActorCmd;
+import pl.tss.restbox.core.domain.command.actor.EditActorCmd;
 import pl.tss.restbox.core.domain.dto.ApiErrDetails;
 import pl.tss.restbox.core.domain.dto.PersonDto;
 import pl.tss.restbox.core.domain.exception.ValidationException;
@@ -21,8 +23,17 @@ public class ValidateNewActor extends CommandHandler {
 
   @Override
   public Cmd<?, ?> handle(Cmd<?, ?> command) {
-    PersonDto input = (PersonDto) command.getInput();
+    PersonDto input = null;
     List<ApiErrDetails> errors = new LinkedList<>();
+
+    if (command instanceof AddActorCmd) {
+      input = ((AddActorCmd) command).getInput();
+    } else if (command instanceof EditActorCmd) {
+      input = ((EditActorCmd) command).getInput();
+    } else {
+      input = (PersonDto) command.getInput();
+    }
+
     log.info("Validating new actor data [firstName = {}, lastName = {}]", input.getFirstName(), input.getLastName());
 
     if (input.getFirstName() == null || input.getFirstName().trim().isEmpty()) {

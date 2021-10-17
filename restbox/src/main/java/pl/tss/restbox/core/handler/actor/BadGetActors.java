@@ -32,7 +32,14 @@ public class BadGetActors extends CommandHandler {
 
   @Override
   public Cmd<?, ?> handle(Cmd<?, ?> command) {
-    ActorsFilter filter = ((GetActorsCmd) command).getInput();
+    ActorsFilter filter = null;
+
+    if (command instanceof GetActorsCmd) {
+      filter = ((GetActorsCmd) command).getInput();
+    } else {
+      filter = (ActorsFilter) command.getInput();
+    }
+
     Pagination pagination = filter.getPagination();
     List<PersonDto> actorsDto = new LinkedList<>();
     PageDto page = null;
