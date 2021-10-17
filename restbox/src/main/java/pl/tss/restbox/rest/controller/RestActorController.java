@@ -48,7 +48,7 @@ class RestActorController implements ActorController<ResponseEntity<?>> {
 
   @Override
   @RequestMapping(path = "/{perId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Void> deleteActor(Integer perId) {
+  public ResponseEntity<Void> deleteActor(@PathVariable(name = "perId") Integer perId) {
     log.debug("Deleting actor [perId = {}]", perId);
     actorFacade.execute(new DeleteActorCmd(perId));
     log.debug("Actor deleted [perId = {}]", perId);
