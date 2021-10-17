@@ -1,6 +1,7 @@
 package pl.tss.restbox.core.facade;
 
 import java.time.OffsetDateTime;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 import org.junit.jupiter.api.Assertions;
@@ -9,16 +10,21 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.springframework.core.env.Environment;
 
 import pl.tss.restbox.core.domain.command.Cmd;
 import pl.tss.restbox.core.domain.command.actor.AddActorCmd;
+import pl.tss.restbox.core.domain.command.actor.DeleteActorCmd;
 import pl.tss.restbox.core.domain.command.actor.EditActorCmd;
 import pl.tss.restbox.core.domain.command.actor.GetActorsCmd;
 import pl.tss.restbox.core.domain.dto.PersonDto;
+import pl.tss.restbox.core.domain.entity.Actor;
 import pl.tss.restbox.core.domain.entity.Person;
 import pl.tss.restbox.core.domain.exception.ValidationException;
 import pl.tss.restbox.core.domain.filter.ActorsFilter;
+import pl.tss.restbox.core.port.output.repo.ActorRepo;
 import pl.tss.restbox.core.port.output.repo.PersonRepo;
 
 /**
@@ -53,6 +59,9 @@ public class ActorFacadeTest {
   private Environment env;
 
   @Mock
+  private ActorRepo actorRepo;
+
+  @Mock
   private PersonRepo personRepo;
 
   @BeforeEach
@@ -70,7 +79,7 @@ public class ActorFacadeTest {
     mockedActors[4].setPerId(5);
 
     MockitoAnnotations.initMocks(this);
-    actorFacade = new ActorFacade(env, personRepo);
+    actorFacade = new ActorFacade(env, actorRepo, personRepo);
   }
 
   @Test
@@ -101,6 +110,69 @@ public class ActorFacadeTest {
 
     Mockito.when(env.getActiveProfiles()).thenReturn(new String[] { "valid" });
     Assertions.assertEquals(1, ((AddActorCmd) actorFacade.execute(new AddActorCmd(validActor))).getOutput());
+  }
+
+  @Test
+  public void deleteActorTest() {
+    Person mockedActor = new Person("Tom", "Cruise", OffsetDateTime.parse("1962-07-03T00:00:00+02:00"), 10, false);
+    Actor[] mockedRolesAssignemnt = new Actor[] { new Actor(mockedActor, null), new Actor(mockedActor, null),
+        new Actor(mockedActor, null), new Actor(mockedActor, null) };
+
+    mockedRolesAssignemnt[0].setActId(1);
+    mockedRolesAssignemnt[1].setActId(2);
+    mockedRolesAssignemnt[2].setActId(3);
+    mockedRolesAssignemnt[3].setActId(4);
+
+    mockedActor.setPerId(1);
+    mockedActor.setActors(Arrays.asList(mockedRolesAssignemnt));
+
+    Mockito.when(env.getActiveProfiles()).thenReturn(new String[] { "valid" });
+    Mockito.when(personRepo.findFirstByPerIdAndDirector(1, false)).thenReturn(mockedActor);
+    Mockito.when(personRepo.findFirstByPerIdAndDirector(100, false)).thenReturn(null);
+    Mockito.when(personRepo.save(mockedActor)).thenAnswer(new Answer<Person>() {
+
+      @Override
+      public Person answer(InvocationOnMock invocation) throws Throwable {
+        mockedActor.setAct(false);
+
+        return mockedActor;
+      }
+
+    });
+
+    Assertions.assertThrows(ValidationException.class, () -> actorFacade.execute(new DeleteActorCmd(100)));
+    Assertions.assertDoesNotThrow(() -> actorFacade.execute(new DeleteActorCmd(1)));
+    Assertions.assertFalse(mockedActor.isAct());
+
+    for (Actor roleAssignment : mockedActor.getActors()) {
+      Assertions.assertFalse(roleAssignment.isAct());
+    }
+
+    Person invalidMockedActor = new Person("Tom", "Cruise", OffsetDateTime.parse("1962-07-03T00:00:00+02:00"), 10,
+        false);
+    Actor[] invalidMockedRolesAssignemnt = new Actor[] { new Actor(mockedActor, null), new Actor(mockedActor, null),
+        new Actor(mockedActor, null), new Actor(mockedActor, null) };
+
+    invalidMockedRolesAssignemnt[0].setActId(1);
+    invalidMockedRolesAssignemnt[1].setActId(2);
+    invalidMockedRolesAssignemnt[2].setActId(3);
+    invalidMockedRolesAssignemnt[3].setActId(4);
+
+    invalidMockedActor.setPerId(1);
+    invalidMockedActor.setActors(Arrays.asList(invalidMockedRolesAssignemnt));
+
+    Mockito.when(env.getActiveProfiles()).thenReturn(new String[] { "invalid" });
+    Mockito.when(personRepo.findFirstByPerIdAndDirector(1, false)).thenReturn(invalidMockedActor);
+    Mockito.when(personRepo.findFirstByPerIdAndDirector(100, false)).thenReturn(null);
+    Mockito.when(personRepo.save(invalidMockedActor)).thenReturn(invalidMockedActor);
+
+    Assertions.assertThrows(ValidationException.class, () -> actorFacade.execute(new DeleteActorCmd(100)));
+    Assertions.assertDoesNotThrow(() -> actorFacade.execute(new DeleteActorCmd(1)));
+    Assertions.assertTrue(invalidMockedActor.isAct());
+
+    for (Actor roleAssignment : invalidMockedActor.getActors()) {
+      Assertions.assertTrue(roleAssignment.isAct());
+    }
   }
 
   @Test
