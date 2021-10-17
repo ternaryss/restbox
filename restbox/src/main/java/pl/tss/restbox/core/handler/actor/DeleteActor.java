@@ -4,6 +4,7 @@ import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 import pl.tss.restbox.core.domain.command.Cmd;
+import pl.tss.restbox.core.domain.dto.PersonDto;
 import pl.tss.restbox.core.domain.entity.Actor;
 import pl.tss.restbox.core.domain.entity.Person;
 import pl.tss.restbox.core.handler.CommandHandler;
@@ -28,10 +29,10 @@ public class DeleteActor extends CommandHandler {
 
   @Override
   public Cmd<?, ?> handle(Cmd<?, ?> command) {
-    Integer input = (Integer) command.getInput();
-    log.info("Deleting actor [perId = {}]", input);
+    PersonDto input = (PersonDto) command.getInput();
+    log.info("Deleting actor [perId = {}]", input.getPerId());
 
-    Person actor = personRepo.findFirstByPerIdAndDirector(input, false);
+    Person actor = personRepo.findFirstByPerIdAndDirector(input.getPerId(), false);
     List<Actor> rolesAssignment = actor.getActors();
 
     rolesAssignment.forEach(as -> as.setAct(false));
