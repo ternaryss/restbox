@@ -11,6 +11,8 @@ public interface ActorController<R> {
 
   R addActor(PersonDto payload);
 
+  R deleteActor(Integer perId);
+
   R editActor(Integer perId, PersonDto payload);
 
   R getActors(String firstName, String lastName, Integer rate, Integer page, Integer size, String sort);

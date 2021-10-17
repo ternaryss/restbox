@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
 import pl.tss.restbox.core.domain.command.actor.AddActorCmd;
+import pl.tss.restbox.core.domain.command.actor.DeleteActorCmd;
 import pl.tss.restbox.core.domain.command.actor.EditActorCmd;
 import pl.tss.restbox.core.domain.command.actor.GetActorsCmd;
 import pl.tss.restbox.core.domain.dto.PageDto;
@@ -43,6 +44,16 @@ class RestActorController implements ActorController<ResponseEntity<?>> {
     log.debug("Actor added [perId = {}]", command.getOutput());
 
     return ResponseEntity.status(201).body(command.getOutput());
+  }
+
+  @Override
+  @RequestMapping(path = "/{perId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<Void> deleteActor(Integer perId) {
+    log.debug("Deleting actor [perId = {}]", perId);
+    actorFacade.execute(new DeleteActorCmd(perId));
+    log.debug("Actor deleted [perId = {}]", perId);
+
+    return ResponseEntity.status(200).build();
   }
 
   @Override
