@@ -46,7 +46,7 @@ public class Country implements Serializable {
   }
 
   @Id
-  @Column(name = "cou_id", nullable = false, unique = true)
+  @Column(name = "cou_id", nullable = false)
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   public int getCouId() {
     return couId;

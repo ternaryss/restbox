@@ -14,7 +14,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -47,7 +46,7 @@ public class Genere implements Serializable {
   }
 
   @Id
-  @Column(name = "gen_id", nullable = false, unique = true)
+  @Column(name = "gen_id", nullable = false)
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   public int getGenId() {
     return genId;

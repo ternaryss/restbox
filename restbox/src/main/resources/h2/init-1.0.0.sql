@@ -7,8 +7,7 @@ create table if not exists genere (
   name varchar not null,
   act boolean not null default true,
   create_date timestamp not null default current_timestamp,
-  modify_date timestamp not null default current_timestamp,
-  unique key genere_unique_name (name)
+  modify_date timestamp not null default current_timestamp
 );
 
 create table if not exists country (
@@ -16,8 +15,7 @@ create table if not exists country (
   name varchar not null,
   act boolean not null default true,
   create_date timestamp not null default current_timestamp,
-  modify_date timestamp not null default current_timestamp,
-  unique key country_unique_name (name)
+  modify_date timestamp not null default current_timestamp
 );
 
 create table if not exists person (
