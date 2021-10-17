@@ -4,6 +4,8 @@ History of **restbox** with changes description.
 
 ## Unreleased
 
+- [DELETE] Delete actor with bugs
+- [DELETE] Delete actor without bugs
 - [PUT] Edit actor with bugs
 - [PUT] Edit actor without bugs
 - [GET] Get acotrs with bugs
