@@ -15,7 +15,6 @@ import org.mockito.stubbing.Answer;
 import pl.tss.restbox.core.domain.command.actor.DeleteActorCmd;
 import pl.tss.restbox.core.domain.entity.Actor;
 import pl.tss.restbox.core.domain.entity.Person;
-import pl.tss.restbox.core.domain.exception.ValidationException;
 import pl.tss.restbox.core.handler.CommandHandler;
 import pl.tss.restbox.core.port.output.repo.ActorRepo;
 import pl.tss.restbox.core.port.output.repo.PersonRepo;
@@ -68,7 +67,7 @@ public class DeleteActorTest {
 
   @Test
   public void deleteActorTest() {
-    Assertions.assertDoesNotThrow(() -> handler.handle(new DeleteActorCmd(1)));
+    handler.handle(new DeleteActorCmd(1));
     Assertions.assertFalse(mockedActor.isAct());
 
     for (Actor roleAssignment : mockedActor.getActors()) {
