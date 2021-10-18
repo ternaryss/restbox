@@ -29,14 +29,7 @@ public class DeleteActor extends CommandHandler {
 
   @Override
   public Cmd<?, ?> handle(Cmd<?, ?> command) {
-    Integer input = null;
-
-    if (command instanceof DeleteActorCmd) {
-      input = ((DeleteActorCmd) command).getInput();
-    } else {
-      input = (Integer) command.getInput();
-    }
-
+    Integer input = ((DeleteActorCmd) command).getInput();
     log.info("Deleting actor [perId = {}]", input);
 
     Person actor = personRepo.findFirstByPerIdAndDirector(input, false);

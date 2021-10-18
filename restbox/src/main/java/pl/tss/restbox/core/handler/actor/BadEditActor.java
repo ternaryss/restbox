@@ -26,14 +26,7 @@ public class BadEditActor extends CommandHandler {
 
   @Override
   public Cmd<?, ?> handle(Cmd<?, ?> command) {
-    PersonDto input = null;
-
-    if (command instanceof EditActorCmd) {
-      input = ((EditActorCmd) command).getInput();
-    } else {
-      input = (PersonDto) command.getInput();
-    }
-
+    PersonDto input = ((EditActorCmd) command).getInput();
     Person actor = personRepo.findFirstByPerIdAndDirector(input.getPerId(), false);
     log.info("Modifying actor [perId = {}]", actor.getPerId());
 

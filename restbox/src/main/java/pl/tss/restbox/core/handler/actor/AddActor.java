@@ -26,14 +26,7 @@ public class AddActor extends CommandHandler {
 
   @Override
   public Cmd<?, ?> handle(Cmd<?, ?> command) {
-    PersonDto input = null;
-
-    if (command instanceof AddActorCmd) {
-      input = ((AddActorCmd) command).getInput();
-    } else {
-      input = (PersonDto) command.getInput();
-    }
-
+    PersonDto input = ((AddActorCmd) command).getInput();
     log.info("Adding actor [firstName = {}, lastName = {}]", input.getFirstName(), input.getLastName());
 
     OffsetDateTime birthday = OffsetDateTime.parse(input.getBirthday());
