@@ -1,6 +1,6 @@
 package pl.tss.restbox.core.handler.movie;
 
-import java.time.OffsetTime;
+import java.time.OffsetDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -38,7 +38,7 @@ public class ValidateNewMovie extends CommandHandler {
       errors.add(ApiErrDetails.builder().field("premiere").message("err.movie.premiere.req").build());
     } else {
       try {
-        OffsetTime.parse(input.getPremiere());
+        OffsetDateTime.parse(input.getPremiere());
       } catch (Exception ex) {
         errors.add(ApiErrDetails.builder().field("premiere").message("err.movie.premiere.format").build());
       }
