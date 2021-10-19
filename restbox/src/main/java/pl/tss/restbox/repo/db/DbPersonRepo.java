@@ -118,6 +118,15 @@ class DbPersonRepo implements PersonRepo {
   }
 
   @Override
+  public Person findFirstByDirectorOrderByPerIdAsc(boolean director) {
+    log.debug("Searching for person [director = {}]", director);
+    Person person = repo.findFirstByDirectorAndActOrderByPerIdAsc(true, true);
+    log.debug("Person found [perId = {}]", person != null ? person.getPerId() : null);
+
+    return person;
+  }
+
+  @Override
   public Person findFirstByPerIdAndDirector(Integer perId, boolean director) {
     log.debug("Searching for person [perId = {}, director = {}]", perId, director);
     Person person = null;
@@ -161,6 +170,8 @@ class DbPersonRepo implements PersonRepo {
    * Nested person repository.
    */
   private interface CrudPersonRepo extends CrudRepository<Person, Integer> {
+
+    Person findFirstByDirectorAndActOrderByPerIdAsc(boolean director, boolean act);
 
   }
 

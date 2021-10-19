@@ -16,6 +16,8 @@ public interface PersonRepo {
 
   List<Person> findByActorsFilter(ActorsFilter filter);
 
+  Person findFirstByDirectorOrderByPerIdAsc(boolean director);
+
   Person findFirstByPerIdAndDirector(Integer perId, boolean director);
 
   List<Person> findByPerIdInAndDirector(List<Integer> ids, boolean director);
