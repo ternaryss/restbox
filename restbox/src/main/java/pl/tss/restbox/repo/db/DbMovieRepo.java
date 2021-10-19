@@ -1,5 +1,7 @@
 package pl.tss.restbox.repo.db;
 
+import java.time.OffsetDateTime;
+
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -25,6 +27,7 @@ class DbMovieRepo implements MovieRepo {
   @Override
   public Movie save(Movie movie) {
     log.debug("Saving movie [movId = {}]", movie.getMovId());
+    movie.setModifyDate(OffsetDateTime.now());
     movie = repo.save(movie);
     log.debug("Movie saved [movId = {}]", movie.getMovId());
 
