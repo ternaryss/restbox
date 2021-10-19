@@ -52,7 +52,7 @@ public class ValidateActorExistsTest {
   }
 
   @Test
-  public void actorDoNotExists() {
+  public void actorDoNotExistsTest() {
     String field = "perId";
     String msgCode = "err.actor.exists";
 
