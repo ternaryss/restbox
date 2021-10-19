@@ -29,10 +29,12 @@ public class ValidateCountryExists extends CommandHandler {
   @Override
   public Cmd<?, ?> handle(Cmd<?, ?> command) {
     String name = null;
+    String field = "name";
     List<ApiErrDetails> errors = new LinkedList<>();
 
     if (command instanceof AddMovieCmd) {
       name = ((AddMovieCmd) command).getInput().getCountry();
+      field = "country.name";
     } else {
       name = (String) command.getInput();
     }
@@ -42,7 +44,7 @@ public class ValidateCountryExists extends CommandHandler {
     Country country = countryRepo.findFirstByNameIgnoreCase(name != null ? name.trim() : null);
 
     if (country == null) {
-      errors.add(ApiErrDetails.builder().field("country.name").message("err.country.exists").build());
+      errors.add(ApiErrDetails.builder().field(field).message("err.country.exists").build());
     }
 
     log.info("Validation if country exists finished [errors size = {}]", errors.size());
