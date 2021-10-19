@@ -18,6 +18,8 @@ public interface PersonRepo {
 
   Person findFirstByPerIdAndDirector(Integer perId, boolean director);
 
+  List<Person> findByPerIdInAndDirector(List<Integer> ids, boolean director);
+
   Person save(Person person);
 
 }

@@ -137,6 +137,17 @@ class DbPersonRepo implements PersonRepo {
   }
 
   @Override
+  public List<Person> findByPerIdInAndDirector(List<Integer> ids, boolean director) {
+    log.debug("Searching for persons [ids size = {}, director = {}]", ids.size(), director);
+    String query = "select distinct per from Person per where per.act = :act and per.director = :director and per.perId in :ids";
+    List<Person> persons = entityManager.createQuery(query, Person.class).setParameter("act", true)
+        .setParameter("director", director).setParameter("ids", ids).getResultList();
+    log.debug("Persons found [persons size = {}]", persons != null ? persons.size() : null);
+
+    return persons != null ? persons : new ArrayList<>();
+  }
+
+  @Override
   public Person save(Person person) {
     log.debug("Saving person [perId = {}]", person.getPerId());
     person.setModifyDate(OffsetDateTime.now());
