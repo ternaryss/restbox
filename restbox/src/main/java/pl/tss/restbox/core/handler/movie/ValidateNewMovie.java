@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import pl.tss.restbox.core.domain.command.Cmd;
 import pl.tss.restbox.core.domain.command.movie.AddMovieCmd;
 import pl.tss.restbox.core.domain.dto.ApiErrDetails;
-import pl.tss.restbox.core.domain.dto.MovieDto;
+import pl.tss.restbox.core.domain.dto.MovieDetailsDto;
 import pl.tss.restbox.core.domain.exception.ValidationException;
 import pl.tss.restbox.core.handler.CommandHandler;
 
@@ -22,7 +22,7 @@ public class ValidateNewMovie extends CommandHandler {
 
   @Override
   public Cmd<?, ?> handle(Cmd<?, ?> command) {
-    MovieDto input = ((AddMovieCmd) command).getInput();
+    MovieDetailsDto input = ((AddMovieCmd) command).getInput();
     List<ApiErrDetails> errors = new LinkedList<>();
     log.info("Validating new movie data [title = {}, premiere = {}]", input.getTitle(), input.getPremiere());
 
@@ -58,6 +58,14 @@ public class ValidateNewMovie extends CommandHandler {
 
     if (input.getCountry() == null || input.getCountry().trim().isEmpty()) {
       errors.add(ApiErrDetails.builder().field("country").message("err.movie.country.req").build());
+    }
+
+    if (input.getDirector() == null) {
+      errors.add(ApiErrDetails.builder().field("director").message("err.movie.director.req").build());
+    }
+
+    if (input.getActors() == null) {
+      errors.add(ApiErrDetails.builder().field("actors").message("err.movie.actors.req").build());
     }
 
     log.info("New movie data validation finished [errors size = {}]", errors.size());
