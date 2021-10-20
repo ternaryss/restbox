@@ -177,7 +177,7 @@ public class ValidateNewMovieTest {
   }
 
   @Test
-  public void lengthValidTest() {
+  public void lengthInvalidTest() {
     String field = "length";
     String msgCode = "err.movie.length.invalid";
 
