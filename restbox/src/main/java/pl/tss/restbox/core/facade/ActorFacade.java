@@ -2,6 +2,7 @@ package pl.tss.restbox.core.facade;
 
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
 import pl.tss.restbox.core.domain.command.Cmd;
@@ -55,6 +56,7 @@ public class ActorFacade extends Facade {
     return h1.handle(command);
   }
 
+  @Transactional
   private Cmd<?, ?> deleteActor(DeleteActorCmd command) {
     CommandHandler h1 = new ValidateActorExists(personRepo);
     CommandHandler h2 = new DeleteActor(actorRepo, personRepo);

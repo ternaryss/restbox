@@ -2,6 +2,7 @@ package pl.tss.restbox.core.facade;
 
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
 import pl.tss.restbox.core.domain.command.Cmd;
@@ -45,6 +46,7 @@ public class MovieFacade extends Facade {
     this.personRepo = personRepo;
   }
 
+  @Transactional
   private Cmd<?, ?> addMovie(AddMovieCmd command) {
     CommandHandler h1 = new ValidateNewMovie();
     CommandHandler h2 = new ValidateCountryExists(countryRepo);
