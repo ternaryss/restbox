@@ -33,11 +33,13 @@ public class ValidateActorsExists extends CommandHandler {
   @SuppressWarnings("unchecked")
   public Cmd<?, ?> handle(Cmd<?, ?> command) {
     Set<Integer> input = null;
+    String field = "perId[{}]";
     List<ApiErrDetails> errors = new LinkedList<>();
 
     if (command instanceof AddMovieCmd) {
       input = ((AddMovieCmd) command).getInput().getActors().stream().map(PersonDto::getPerId)
           .collect(Collectors.toSet());
+      field = "movie.actors.perId[{}]";
     } else {
       input = (Set<Integer>) command.getInput();
     }
@@ -50,7 +52,8 @@ public class ValidateActorsExists extends CommandHandler {
       Person actor = personRepo.findFirstByPerIdAndDirector(identifiers[i], false);
 
       if (actor == null) {
-        errors.add(ApiErrDetails.builder().field("perId[" + (i + 1) + "]").message("err.actor.exists").build());
+        errors.add(ApiErrDetails.builder().field(field.replace("{}", String.valueOf(i + 1))).message("err.actor.exists")
+            .build());
       }
     }
 
