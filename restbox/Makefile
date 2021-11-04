@@ -7,7 +7,7 @@ db = data/
 gradle = ./gradlew
 path = build/libs
 profile = --spring.profiles.active
-version = 0.0.0
+version = $(shell $(gradle) properties --no-daemon --console=plain -q | grep "^version:" | awk '{print $$2}')
 
 all: build
 
