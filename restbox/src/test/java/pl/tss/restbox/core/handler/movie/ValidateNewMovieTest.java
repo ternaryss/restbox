@@ -1,5 +1,6 @@
 package pl.tss.restbox.core.handler.movie;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -233,6 +234,17 @@ public class ValidateNewMovieTest {
     String msgCode = "err.movie.actors.req";
 
     movie.setActors(null);
+    Assertions.assertThrows(ValidationException.class, () -> handler.handle(command));
+
+    try {
+      handler.handle(command);
+    } catch (ValidationException ex) {
+      ApiErrDetails error = ex.getDetails().get(0);
+      Assertions.assertEquals(field, error.getField());
+      Assertions.assertEquals(msgCode, error.getMessage());
+    }
+
+    movie.setActors(new ArrayList<>());
     Assertions.assertThrows(ValidationException.class, () -> handler.handle(command));
 
     try {
