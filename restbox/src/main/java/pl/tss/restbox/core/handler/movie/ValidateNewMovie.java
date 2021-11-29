@@ -64,7 +64,7 @@ public class ValidateNewMovie extends CommandHandler {
       errors.add(ApiErrDetails.builder().field("director").message("err.movie.director.req").build());
     }
 
-    if (input.getActors() == null) {
+    if (input.getActors() == null || input.getActors().isEmpty()) {
       errors.add(ApiErrDetails.builder().field("actors").message("err.movie.actors.req").build());
     }
 
