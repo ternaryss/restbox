@@ -130,7 +130,7 @@ class DbPersonRepo implements PersonRepo {
   public Person findFirstByPerIdAndDirector(Integer perId, boolean director) {
     log.debug("Searching for person [perId = {}, director = {}]", perId, director);
     Person person = null;
-    String query = "select distinct per from Person per join fetch per.actors where per.perId = :perId "
+    String query = "select distinct per from Person per left join fetch per.actors where per.perId = :perId "
         + "and per.director = :director and per.act = :act";
 
     try {
