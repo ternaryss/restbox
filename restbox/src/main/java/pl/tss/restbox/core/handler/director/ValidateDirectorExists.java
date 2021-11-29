@@ -47,7 +47,7 @@ public class ValidateDirectorExists extends CommandHandler {
       errors.add(ApiErrDetails.builder().field(field).message("err.director.exists").build());
     }
 
-    log.info("Validation if country exists finished [errors size = {}]", errors.size());
+    log.info("Validation if director exists finished [errors size = {}]", errors.size());
 
     if (!errors.isEmpty()) {
       throw new ValidationException(errors);
