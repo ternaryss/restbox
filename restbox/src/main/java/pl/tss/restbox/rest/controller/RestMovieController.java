@@ -2,6 +2,7 @@ package pl.tss.restbox.rest.controller;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,7 +31,7 @@ class RestMovieController implements MovieController<ResponseEntity<?>> {
 
   @Override
   @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> addMovie(MovieDetailsDto payload) {
+  public ResponseEntity<?> addMovie(@RequestBody MovieDetailsDto payload) {
     log.debug("Adding movie [payload = {}]", payload);
     AddMovieCmd command = (AddMovieCmd) movieFacade.execute(new AddMovieCmd(payload));
     log.debug("Movie added [movId = {}]", command.getOutput());
