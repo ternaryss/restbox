@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import pl.tss.restbox.core.domain.command.Cmd;
 import pl.tss.restbox.core.domain.command.movie.AddMovieCmd;
+import pl.tss.restbox.core.domain.command.movie.GetMovieCmd;
 import pl.tss.restbox.core.handler.CommandHandler;
 import pl.tss.restbox.core.handler.actor.ValidateActorsExists;
 import pl.tss.restbox.core.handler.country.ValidateCountryExists;
@@ -14,6 +15,8 @@ import pl.tss.restbox.core.handler.director.ValidateDirectorExists;
 import pl.tss.restbox.core.handler.genere.ValidateGenereExists;
 import pl.tss.restbox.core.handler.movie.AddMovie;
 import pl.tss.restbox.core.handler.movie.BadAddMovie;
+import pl.tss.restbox.core.handler.movie.GetMovie;
+import pl.tss.restbox.core.handler.movie.ValidateMovieExists;
 import pl.tss.restbox.core.handler.movie.ValidateNewMovie;
 import pl.tss.restbox.core.port.output.repo.ActorRepo;
 import pl.tss.restbox.core.port.output.repo.CountryRepo;
@@ -70,12 +73,23 @@ public class MovieFacade extends Facade {
     return h1.handle(command);
   }
 
+  private Cmd<?, ?> getMovie(GetMovieCmd command) {
+    CommandHandler h1 = new ValidateMovieExists(movieRepo);
+    CommandHandler h2 = new GetMovie(movieRepo);
+
+    h1.setNext(h2);
+
+    return h1.handle(command);
+  }
+
   @Override
   public Cmd<?, ?> execute(Cmd<?, ?> command) {
     log.info("Executing movie command [command = {}]", command != null ? command.getClass().getSimpleName() : null);
 
     if (command instanceof AddMovieCmd) {
       return addMovie((AddMovieCmd) command);
+    } else if (command instanceof GetMovieCmd) {
+      return getMovie((GetMovieCmd) command);
     } else {
       throw new UnsupportedOperationException("Unknown movie command");
     }
