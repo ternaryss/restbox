@@ -2,6 +2,9 @@ package pl.tss.restbox.repo.db;
 
 import java.time.OffsetDateTime;
 
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,10 +21,31 @@ import pl.tss.restbox.core.port.output.repo.MovieRepo;
 @Repository
 class DbMovieRepo implements MovieRepo {
 
+  private final EntityManager entityManager;
   private final CrudMovieRepo repo;
 
-  public DbMovieRepo(CrudMovieRepo repo) {
+  public DbMovieRepo(EntityManager entityManager, CrudMovieRepo repo) {
+    this.entityManager = entityManager;
     this.repo = repo;
+  }
+
+  @Override
+  public Movie findFirstByMovId(Integer movId) {
+    log.debug("Searching for movie [movId = {}]", movId);
+    Movie movie = null;
+    String query = "select mov from Movie mov join fetch mov.actors where mov.movId = :movId and mov.act = :act "
+        + "and mov.actors.act = :act";
+
+    try {
+      movie = entityManager.createQuery(query, Movie.class).setParameter("movId", movId).setParameter("act", true)
+          .getSingleResult();
+    } catch (NoResultException ex) {
+      movie = null;
+    }
+
+    log.debug("Movie found [movId = {}]", movie != null ? movie.getMovId() : null);
+
+    return movie;
   }
 
   @Override

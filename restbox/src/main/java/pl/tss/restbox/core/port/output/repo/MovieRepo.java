@@ -9,6 +9,8 @@ import pl.tss.restbox.core.domain.entity.Movie;
  */
 public interface MovieRepo {
 
+  Movie findFirstByMovId(Integer movId);
+
   Movie save(Movie movie);
 
 }
