@@ -27,11 +27,12 @@ public class ValidateMovieExists extends CommandHandler {
 
   @Override
   public Cmd<?, ?> handle(Cmd<?, ?> command) {
-    Integer movId = (Integer) command.getInput();
+    Integer input = (Integer) command.getInput();
     List<ApiErrDetails> errors = new LinkedList<>();
 
-    log.info("Validating if movie exists [movId = {}]", movId);
-    Movie movie = movieRepo.findFirstByMovId(movId);
+    log.info("Validating if movie exists [movId = {}]", input);
+
+    Movie movie = movieRepo.findFirstByMovId(input);
 
     if (movie == null) {
       errors.add(ApiErrDetails.builder().field("movId").message("err.movie.exists").build());
