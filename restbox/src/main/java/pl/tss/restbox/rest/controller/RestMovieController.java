@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
 import pl.tss.restbox.core.domain.command.movie.AddMovieCmd;
+import pl.tss.restbox.core.domain.command.movie.EditMovieCmd;
 import pl.tss.restbox.core.domain.command.movie.GetMovieCmd;
 import pl.tss.restbox.core.domain.dto.MovieDetailsDto;
 import pl.tss.restbox.core.facade.MovieFacade;
@@ -39,6 +40,18 @@ class RestMovieController implements MovieController<ResponseEntity<?>> {
     log.debug("Movie added [movId = {}]", command.getOutput());
 
     return ResponseEntity.status(201).body(command.getOutput());
+  }
+
+  @Override
+  @RequestMapping(path = "/{movId}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<MovieDetailsDto> editMovie(@PathVariable(value = "movId") Integer movId,
+      @RequestBody MovieDetailsDto payload) {
+    log.debug("Modifying movie [movId = {}]", movId);
+    payload.setMovId(movId);
+    EditMovieCmd command = (EditMovieCmd) movieFacade.execute(new EditMovieCmd(payload));
+    log.debug("Movie modified [movId = {}]", command.getOutput().getMovId());
+
+    return ResponseEntity.status(200).body(command.getOutput());
   }
 
   @Override
