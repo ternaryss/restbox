@@ -12,6 +12,8 @@ import pl.tss.restbox.core.domain.entity.Movie;
  */
 public interface ActorRepo {
 
+  void deleteAll(List<Actor> rolesAssignment);
+
   List<Actor> findByMovie(Movie movie);
 
   void saveAll(List<Actor> rolesAssignment);

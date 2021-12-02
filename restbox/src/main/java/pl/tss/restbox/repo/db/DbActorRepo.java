@@ -28,6 +28,12 @@ class DbActorRepo implements ActorRepo {
   }
 
   @Override
+  public void deleteAll(List<Actor> rolesAssignment) {
+    log.debug("Deleting all roles assignment [rolesAssignment size = {}]", rolesAssignment.size());
+    repo.deleteAll(rolesAssignment);
+    log.debug("All roles assignment deleted");
+  }
+
   @Override
   public List<Actor> findByMovie(Movie movie) {
     log.debug("Searching for roles assignment [movId = {}]", movie.getMovId());
