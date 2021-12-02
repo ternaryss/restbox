@@ -11,6 +11,8 @@ public interface MovieRepo {
 
   Movie findFirstByMovId(Integer movId);
 
+  Movie findFirstByMovIdAlsoDeleted(Integer movId);
+
   Movie save(Movie movie);
 
 }

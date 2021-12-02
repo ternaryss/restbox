@@ -49,6 +49,23 @@ class DbMovieRepo implements MovieRepo {
   }
 
   @Override
+  public Movie findFirstByMovIdAlsoDeleted(Integer movId) {
+    log.debug("Searching for movie [movId = {}]", movId);
+    Movie movie = null;
+    String query = "select mov from Movie mov left join fetch mov.actors actors where mov.movId = :movId";
+
+    try {
+      movie = entityManager.createQuery(query, Movie.class).setParameter("movId", movId).getSingleResult();
+    } catch (NoResultException ex) {
+      movie = null;
+    }
+
+    log.debug("Movie found [movId = {}]", movie != null ? movie.getMovId() : null);
+
+    return movie;
+  }
+
+  @Override
   public Movie save(Movie movie) {
     log.debug("Saving movie [movId = {}]", movie.getMovId());
     movie.setModifyDate(OffsetDateTime.now());
