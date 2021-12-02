@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import lombok.extern.slf4j.Slf4j;
 import pl.tss.restbox.core.domain.entity.Actor;
+import pl.tss.restbox.core.domain.entity.Movie;
 import pl.tss.restbox.core.port.output.repo.ActorRepo;
 
 /**
@@ -26,6 +27,15 @@ class DbActorRepo implements ActorRepo {
   }
 
   @Override
+  public Actor findFirstByMovieAndPersonPerId(Movie movie, Integer perId) {
+    log.debug("Searching for actor [movId = {}, perId = {}]", movie != null ? movie.getMovId() : null, perId);
+    Actor actor = repo.findFirstByMovieAndPersonPerId(movie, perId);
+    log.debug("Actor found [actId = {}]", actor != null ? actor.getActId() : null);
+
+    return actor;
+  }
+
+  @Override
   public void saveAll(List<Actor> rolesAssignment) {
     log.debug("Saving all roles assignment [rolesAssignment size = {}]", rolesAssignment.size());
     rolesAssignment.forEach(rol -> rol.setModifyDate(OffsetDateTime.now()));
@@ -37,6 +47,8 @@ class DbActorRepo implements ActorRepo {
    * Nested actor repository.
    */
   private interface CrudActorRepo extends CrudRepository<Actor, Integer> {
+
+    Actor findFirstByMovieAndPersonPerId(Movie movie, Integer perId);
 
   }
 
