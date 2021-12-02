@@ -4,6 +4,7 @@ History of **restbox** with changes description.
 
 ## Unreleased
 
+- [GET] Get single movie details without bugs
 - [POST] Add movie with bugs
 - [POST] Add movie without bugs
 - [DELETE] Delete actor with bugs
