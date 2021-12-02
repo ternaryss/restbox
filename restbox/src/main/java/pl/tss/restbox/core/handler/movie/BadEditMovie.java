@@ -47,7 +47,14 @@ public class BadEditMovie extends CommandHandler {
 
   @Override
   public Cmd<?, ?> handle(Cmd<?, ?> command) {
-    MovieDetailsDto input = ((EditMovieCmd) command).getInput();
+    MovieDetailsDto input = null;
+
+    if (command instanceof EditMovieCmd) {
+      input = ((EditMovieCmd) command).getInput();
+    } else {
+      input = (MovieDetailsDto) command.getInput();
+    }
+
     Movie movie = movieRepo.findFirstByMovIdAlsoDeleted(input.getMovId());
 
     log.info("Modifying movie [movId = {}]", input.getMovId());

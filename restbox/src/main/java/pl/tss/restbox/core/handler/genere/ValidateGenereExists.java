@@ -6,6 +6,7 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import pl.tss.restbox.core.domain.command.Cmd;
 import pl.tss.restbox.core.domain.command.movie.AddMovieCmd;
+import pl.tss.restbox.core.domain.command.movie.EditMovieCmd;
 import pl.tss.restbox.core.domain.dto.ApiErrDetails;
 import pl.tss.restbox.core.domain.entity.Genere;
 import pl.tss.restbox.core.domain.exception.ValidationException;
@@ -29,10 +30,15 @@ public class ValidateGenereExists extends CommandHandler {
   @Override
   public Cmd<?, ?> handle(Cmd<?, ?> command) {
     String name = null;
+    String field = "name";
     List<ApiErrDetails> errors = new LinkedList<>();
 
     if (command instanceof AddMovieCmd) {
       name = ((AddMovieCmd) command).getInput().getGenere();
+      field = "genere.name";
+    } else if (command instanceof EditMovieCmd) {
+      name = ((EditMovieCmd) command).getInput().getGenere();
+      field = "genere.name";
     } else {
       name = (String) command.getInput();
     }
@@ -42,7 +48,7 @@ public class ValidateGenereExists extends CommandHandler {
     Genere genere = genereRepo.findFirstByNameIgnoreCase(name != null ? name.trim() : null);
 
     if (genere == null) {
-      errors.add(ApiErrDetails.builder().field("genere.name").message("err.genere.exists").build());
+      errors.add(ApiErrDetails.builder().field(field).message("err.genere.exists").build());
     }
 
     log.info("Validation if genere exists finished [errors size = {}]", errors.size());

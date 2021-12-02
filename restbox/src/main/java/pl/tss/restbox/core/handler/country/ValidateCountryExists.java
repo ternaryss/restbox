@@ -6,6 +6,7 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import pl.tss.restbox.core.domain.command.Cmd;
 import pl.tss.restbox.core.domain.command.movie.AddMovieCmd;
+import pl.tss.restbox.core.domain.command.movie.EditMovieCmd;
 import pl.tss.restbox.core.domain.dto.ApiErrDetails;
 import pl.tss.restbox.core.domain.entity.Country;
 import pl.tss.restbox.core.domain.exception.ValidationException;
@@ -34,6 +35,9 @@ public class ValidateCountryExists extends CommandHandler {
 
     if (command instanceof AddMovieCmd) {
       name = ((AddMovieCmd) command).getInput().getCountry();
+      field = "country.name";
+    } else if (command instanceof EditMovieCmd) {
+      name = ((EditMovieCmd) command).getInput().getCountry();
       field = "country.name";
     } else {
       name = (String) command.getInput();

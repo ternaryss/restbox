@@ -6,6 +6,7 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import pl.tss.restbox.core.domain.command.Cmd;
 import pl.tss.restbox.core.domain.command.movie.AddMovieCmd;
+import pl.tss.restbox.core.domain.command.movie.EditMovieCmd;
 import pl.tss.restbox.core.domain.dto.ApiErrDetails;
 import pl.tss.restbox.core.domain.entity.Person;
 import pl.tss.restbox.core.domain.exception.ValidationException;
@@ -34,6 +35,9 @@ public class ValidateDirectorExists extends CommandHandler {
 
     if (command instanceof AddMovieCmd) {
       perId = ((AddMovieCmd) command).getInput().getDirector().getPerId();
+      field = "director.perId";
+    } else if (command instanceof EditMovieCmd) {
+      perId = ((EditMovieCmd) command).getInput().getDirector().getPerId();
       field = "director.perId";
     } else {
       perId = (Integer) command.getInput();

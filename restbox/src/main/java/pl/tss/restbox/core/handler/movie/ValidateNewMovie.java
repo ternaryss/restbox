@@ -7,6 +7,7 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import pl.tss.restbox.core.domain.command.Cmd;
 import pl.tss.restbox.core.domain.command.movie.AddMovieCmd;
+import pl.tss.restbox.core.domain.command.movie.EditMovieCmd;
 import pl.tss.restbox.core.domain.dto.ApiErrDetails;
 import pl.tss.restbox.core.domain.dto.MovieDetailsDto;
 import pl.tss.restbox.core.domain.exception.ValidationException;
@@ -22,8 +23,17 @@ public class ValidateNewMovie extends CommandHandler {
 
   @Override
   public Cmd<?, ?> handle(Cmd<?, ?> command) {
-    MovieDetailsDto input = ((AddMovieCmd) command).getInput();
+    MovieDetailsDto input = null;
     List<ApiErrDetails> errors = new LinkedList<>();
+
+    if (command instanceof AddMovieCmd) {
+      input = ((AddMovieCmd) command).getInput();
+    } else if (command instanceof EditMovieCmd) {
+      input = ((EditMovieCmd) command).getInput();
+    } else {
+      input = (MovieDetailsDto) command.getInput();
+    }
+
     log.info("Validating new movie data [title = {}, premiere = {}]", input.getTitle(), input.getPremiere());
 
     if (input.getTitle() == null || input.getTitle().trim().isEmpty()) {

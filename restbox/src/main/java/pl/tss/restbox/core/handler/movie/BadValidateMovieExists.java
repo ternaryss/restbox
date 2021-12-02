@@ -5,6 +5,7 @@ import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 import pl.tss.restbox.core.domain.command.Cmd;
+import pl.tss.restbox.core.domain.command.movie.EditMovieCmd;
 import pl.tss.restbox.core.domain.dto.ApiErrDetails;
 import pl.tss.restbox.core.domain.entity.Movie;
 import pl.tss.restbox.core.domain.exception.ValidationException;
@@ -27,8 +28,14 @@ public class BadValidateMovieExists extends CommandHandler {
 
   @Override
   public Cmd<?, ?> handle(Cmd<?, ?> command) {
-    Integer input = (Integer) command.getInput();
+    Integer input = null;
     List<ApiErrDetails> errors = new LinkedList<>();
+
+    if (command instanceof EditMovieCmd) {
+      input = ((EditMovieCmd) command).getOutput().getMovId();
+    } else {
+      input = (Integer) command.getInput();
+    }
 
     log.info("Validating if movie exists [movId = {}]", input);
 

@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import pl.tss.restbox.core.domain.command.Cmd;
 import pl.tss.restbox.core.domain.command.movie.AddMovieCmd;
+import pl.tss.restbox.core.domain.command.movie.EditMovieCmd;
 import pl.tss.restbox.core.domain.dto.ApiErrDetails;
 import pl.tss.restbox.core.domain.dto.PersonDto;
 import pl.tss.restbox.core.domain.entity.Person;
@@ -38,6 +39,10 @@ public class ValidateActorsExists extends CommandHandler {
 
     if (command instanceof AddMovieCmd) {
       input = ((AddMovieCmd) command).getInput().getActors().stream().map(PersonDto::getPerId)
+          .collect(Collectors.toSet());
+      field = "movie.actors.perId[{}]";
+    } else if (command instanceof EditMovieCmd) {
+      input = ((EditMovieCmd) command).getInput().getActors().stream().map(PersonDto::getPerId)
           .collect(Collectors.toSet());
       field = "movie.actors.perId[{}]";
     } else {
