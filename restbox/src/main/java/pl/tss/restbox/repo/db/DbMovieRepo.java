@@ -33,8 +33,8 @@ class DbMovieRepo implements MovieRepo {
   public Movie findFirstByMovId(Integer movId) {
     log.debug("Searching for movie [movId = {}]", movId);
     Movie movie = null;
-    String query = "select mov from Movie mov join fetch mov.actors where mov.movId = :movId and mov.act = :act "
-        + "and mov.actors.act = :act";
+    String query = "select mov from Movie mov left join fetch mov.actors actors where mov.movId = :movId and mov.act = :act "
+        + "and actors.act = :act";
 
     try {
       movie = entityManager.createQuery(query, Movie.class).setParameter("movId", movId).setParameter("act", true)
