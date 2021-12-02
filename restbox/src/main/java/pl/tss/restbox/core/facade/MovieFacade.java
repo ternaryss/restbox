@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import pl.tss.restbox.core.domain.command.Cmd;
 import pl.tss.restbox.core.domain.command.movie.AddMovieCmd;
+import pl.tss.restbox.core.domain.command.movie.EditMovieCmd;
 import pl.tss.restbox.core.domain.command.movie.GetMovieCmd;
 import pl.tss.restbox.core.handler.CommandHandler;
 import pl.tss.restbox.core.handler.actor.ValidateActorsExists;
@@ -15,6 +16,9 @@ import pl.tss.restbox.core.handler.director.ValidateDirectorExists;
 import pl.tss.restbox.core.handler.genere.ValidateGenereExists;
 import pl.tss.restbox.core.handler.movie.AddMovie;
 import pl.tss.restbox.core.handler.movie.BadAddMovie;
+import pl.tss.restbox.core.handler.movie.BadEditMovie;
+import pl.tss.restbox.core.handler.movie.BadValidateMovieExists;
+import pl.tss.restbox.core.handler.movie.EditMovie;
 import pl.tss.restbox.core.handler.movie.GetMovie;
 import pl.tss.restbox.core.handler.movie.ValidateMovieExists;
 import pl.tss.restbox.core.handler.movie.ValidateNewMovie;
@@ -73,6 +77,34 @@ public class MovieFacade extends Facade {
     return h1.handle(command);
   }
 
+  @Transactional
+  private Cmd<?, ?> editMovie(EditMovieCmd command) {
+    CommandHandler h1 = null;
+    CommandHandler h2 = new ValidateNewMovie();
+    CommandHandler h3 = new ValidateCountryExists(countryRepo);
+    CommandHandler h4 = new ValidateGenereExists(genereRepo);
+    CommandHandler h5 = new ValidateDirectorExists(personRepo);
+    CommandHandler h6 = new ValidateActorsExists(personRepo);
+    CommandHandler h7 = null;
+
+    if (super.isValidProfile()) {
+      h1 = new ValidateMovieExists(movieRepo);
+      h7 = new EditMovie(actorRepo, countryRepo, genereRepo, movieRepo, personRepo);
+    } else {
+      h1 = new BadValidateMovieExists(movieRepo);
+      h7 = new BadEditMovie(actorRepo, countryRepo, genereRepo, movieRepo, personRepo);
+    }
+
+    h1.setNext(h2);
+    h2.setNext(h3);
+    h3.setNext(h4);
+    h4.setNext(h5);
+    h5.setNext(h6);
+    h6.setNext(h7);
+
+    return h1.handle(command);
+  }
+
   private Cmd<?, ?> getMovie(GetMovieCmd command) {
     CommandHandler h1 = new ValidateMovieExists(movieRepo);
     CommandHandler h2 = new GetMovie(movieRepo);
@@ -88,6 +120,8 @@ public class MovieFacade extends Facade {
 
     if (command instanceof AddMovieCmd) {
       return addMovie((AddMovieCmd) command);
+    } else if (command instanceof EditMovieCmd) {
+      return editMovie((EditMovieCmd) command);
     } else if (command instanceof GetMovieCmd) {
       return getMovie((GetMovieCmd) command);
     } else {
