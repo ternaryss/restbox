@@ -1,6 +1,7 @@
 package pl.tss.restbox.repo.db;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
@@ -27,12 +28,14 @@ class DbActorRepo implements ActorRepo {
   }
 
   @Override
-  public Actor findFirstByMovieAndPersonPerId(Movie movie, Integer perId) {
-    log.debug("Searching for actor [movId = {}, perId = {}]", movie != null ? movie.getMovId() : null, perId);
-    Actor actor = repo.findFirstByMovieAndPersonPerId(movie, perId);
-    log.debug("Actor found [actId = {}]", actor != null ? actor.getActId() : null);
+  @Override
+  public List<Actor> findByMovie(Movie movie) {
+    log.debug("Searching for roles assignment [movId = {}]", movie.getMovId());
+    List<Actor> rolesAssignment = repo.findByMovie(movie);
+    log.debug("Roles assignment found [rolesAssignment size = {}]",
+        rolesAssignment != null ? rolesAssignment.size() : null);
 
-    return actor;
+    return rolesAssignment != null ? rolesAssignment : new ArrayList<>();
   }
 
   @Override
@@ -48,7 +51,7 @@ class DbActorRepo implements ActorRepo {
    */
   private interface CrudActorRepo extends CrudRepository<Actor, Integer> {
 
-    Actor findFirstByMovieAndPersonPerId(Movie movie, Integer perId);
+    List<Actor> findByMovie(Movie movie);
 
   }
 

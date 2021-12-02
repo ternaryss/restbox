@@ -12,7 +12,7 @@ import pl.tss.restbox.core.domain.entity.Movie;
  */
 public interface ActorRepo {
 
-  Actor findFirstByMovieAndPersonPerId(Movie movie, Integer perId);
+  List<Actor> findByMovie(Movie movie);
 
   void saveAll(List<Actor> rolesAssignment);
 
