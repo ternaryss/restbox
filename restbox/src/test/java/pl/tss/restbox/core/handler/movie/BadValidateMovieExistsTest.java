@@ -22,11 +22,11 @@ import pl.tss.restbox.core.handler.CommandHandler;
 import pl.tss.restbox.core.port.output.repo.MovieRepo;
 
 /**
- * Unit tests for check if movie exists.
+ * Unit tests for invalid movie exists validation.
  *
  * @author TSS
  */
-public class ValidateMovieExistsTest {
+public class BadValidateMovieExistsTest {
 
   private final Country mockedCountry = new Country("USA");
   private final Genere mockedGenere = new Genere("Action");
@@ -49,12 +49,13 @@ public class ValidateMovieExistsTest {
     mockedDirector.setPerId(1);
 
     mockedMovie.setMovId(1);
+    mockedMovie.setAct(false);
 
     MockitoAnnotations.initMocks(this);
-    Mockito.when(movieRepo.findFirstByMovId(1)).thenReturn(mockedMovie);
-    Mockito.when(movieRepo.findFirstByMovId(2)).thenReturn(null);
+    Mockito.when(movieRepo.findFirstByMovIdAlsoDeleted(1)).thenReturn(mockedMovie);
+    Mockito.when(movieRepo.findFirstByMovIdAlsoDeleted(2)).thenReturn(null);
 
-    handler = new ValidateMovieExists(movieRepo);
+    handler = new BadValidateMovieExists(movieRepo);
   }
 
   @Test
