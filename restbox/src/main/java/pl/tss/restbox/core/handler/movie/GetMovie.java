@@ -37,24 +37,34 @@ public class GetMovie extends CommandHandler {
 
     List<PersonDto> actorsDto = new LinkedList<>();
     movie.getActors().forEach(act -> {
-      Person actor = act.getPerson();
-      PersonDto actorDto = PersonDto.builder().perId(actor.getPerId()).firstName(actor.getFirstName())
-          .secondName(actor.getSecondName()).lastName(actor.getLastName())
-          .birthday(actor.getBirthday().withNano(0).toString()).age(actor.getAge()).rate(actor.getRate())
-          .act(actor.isAct()).build();
-      actorsDto.add(actorDto);
+      if (act.isAct()) {
+        Person actor = act.getPerson();
+
+        if (actor.isAct()) {
+          PersonDto actorDto = PersonDto.builder().perId(actor.getPerId()).firstName(actor.getFirstName())
+              .secondName(actor.getSecondName()).lastName(actor.getLastName())
+              .birthday(actor.getBirthday().withNano(0).toString()).age(actor.getAge()).rate(actor.getRate())
+              .act(actor.isAct()).build();
+          actorsDto.add(actorDto);
+        }
+      }
     });
 
     Person director = movie.getDirector();
-    PersonDto directorDto = PersonDto.builder().perId(director.getPerId()).firstName(director.getFirstName())
-        .secondName(director.getSecondName()).lastName(director.getLastName())
-        .birthday(director.getBirthday().withNano(0).toString()).age(director.getAge()).rate(director.getRate())
-        .act(director.isAct()).build();
+    PersonDto directorDto = null;
+
+    if (director.isAct()) {
+      directorDto = PersonDto.builder().perId(director.getPerId()).firstName(director.getFirstName())
+          .secondName(director.getSecondName()).lastName(director.getLastName())
+          .birthday(director.getBirthday().withNano(0).toString()).age(director.getAge()).rate(director.getRate())
+          .act(director.isAct()).build();
+    }
 
     MovieDetailsDto movieDto = MovieDetailsDto.builder().movId(movie.getMovId()).title(movie.getTitle())
-        .genere(movie.getGenere().getName()).description(movie.getDescription())
+        .genere(movie.getGenere().isAct() ? movie.getGenere().getName() : null).description(movie.getDescription())
         .premiere(movie.getPremiere().withNano(0).toString()).rate(movie.getRate()).length(movie.getLength())
-        .country(movie.getCountry().getName()).act(movie.isAct()).director(directorDto).actors(actorsDto).build();
+        .country(movie.getCountry().isAct() ? movie.getCountry().getName() : null).act(movie.isAct())
+        .director(directorDto).actors(actorsDto).build();
 
     ((GetMovieCmd) command).setOutput(movieDto);
     log.info("Movie got [movId = {}]", movie.getMovId());

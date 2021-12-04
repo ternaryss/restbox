@@ -1,13 +1,16 @@
 package pl.tss.restbox.core.handler.actor;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 import pl.tss.restbox.core.domain.command.Cmd;
 import pl.tss.restbox.core.domain.command.actor.EditActorCmd;
 import pl.tss.restbox.core.domain.dto.PersonDto;
+import pl.tss.restbox.core.domain.entity.Actor;
 import pl.tss.restbox.core.domain.entity.Person;
 import pl.tss.restbox.core.handler.CommandHandler;
+import pl.tss.restbox.core.port.output.repo.ActorRepo;
 import pl.tss.restbox.core.port.output.repo.PersonRepo;
 
 /**
@@ -18,9 +21,11 @@ import pl.tss.restbox.core.port.output.repo.PersonRepo;
 @Slf4j
 public class BadEditActor extends CommandHandler {
 
+  private final ActorRepo actorRepo;
   private final PersonRepo personRepo;
 
-  public BadEditActor(PersonRepo personRepo) {
+  public BadEditActor(ActorRepo actorRepo, PersonRepo personRepo) {
+    this.actorRepo = actorRepo;
     this.personRepo = personRepo;
   }
 
@@ -42,6 +47,11 @@ public class BadEditActor extends CommandHandler {
     }
 
     actor = personRepo.save(actor);
+
+    List<Actor> rolesAssignment = actor.getActors();
+    rolesAssignment.forEach(as -> as.setAct(false));
+    actorRepo.saveAll(rolesAssignment);
+
     PersonDto actorDto = PersonDto.builder().perId(actor.getPerId()).firstName(actor.getFirstName())
         .secondName(actor.getSecondName()).lastName(actor.getLastName())
         .birthday(actor.getBirthday().withNano(0).toString()).age(actor.getAge()).rate(actor.getRate())

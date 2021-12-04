@@ -167,18 +167,7 @@ public class BadEditMovieTest {
     Assertions.assertEquals(mockedDirector.isAct(), processedDirecotr.getAct());
 
     List<PersonDto> processedActors = processedMovie.getActors();
-
-    for (int i = 0; i < processedActors.size(); i++) {
-      Assertions.assertEquals(mockedActors.get(i).getPerId(), processedActors.get(i).getPerId());
-      Assertions.assertEquals(mockedActors.get(i).getFirstName(), processedActors.get(i).getFirstName());
-      Assertions.assertEquals(mockedActors.get(i).getSecondName(), processedActors.get(i).getSecondName());
-      Assertions.assertEquals(mockedActors.get(i).getLastName(), processedActors.get(i).getLastName());
-      Assertions.assertEquals(mockedActors.get(i).getBirthday().withNano(0).toString(),
-          processedActors.get(i).getBirthday());
-      Assertions.assertEquals(mockedActors.get(i).getAge(), processedActors.get(i).getAge());
-      Assertions.assertEquals(mockedActors.get(i).getRate(), processedActors.get(i).getRate());
-      Assertions.assertEquals(mockedActors.get(i).isAct(), processedActors.get(i).getAct());
-    }
+    Assertions.assertEquals(0, processedActors.size());
   }
 
 }

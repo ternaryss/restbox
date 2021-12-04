@@ -76,7 +76,7 @@ public class ActorFacade extends Facade {
     if (super.isValidProfile()) {
       h3 = new EditActor(personRepo);
     } else {
-      h3 = new BadEditActor(personRepo);
+      h3 = new BadEditActor(actorRepo, personRepo);
     }
 
     h1.setNext(h2);

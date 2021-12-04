@@ -131,7 +131,7 @@ class DbPersonRepo implements PersonRepo {
     log.debug("Searching for person [perId = {}, director = {}]", perId, director);
     Person person = null;
     String query = "select distinct per from Person per left join fetch per.actors assignment where per.perId = :perId "
-        + "and per.director = :director and per.act = :act and assignment.act = :act";
+        + "and per.director = :director and per.act = :act";
 
     try {
       person = entityManager.createQuery(query, Person.class).setParameter("perId", perId)

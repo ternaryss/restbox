@@ -85,7 +85,11 @@ public class BadEditMovie extends CommandHandler {
 
     for (Person actor : actors) {
       Actor assignment = new Actor(actor, movie);
-      assignment.setAct(false);
+
+      if (!movie.isAct()) {
+        assignment.setAct(false);
+      }
+
       rolesAssignment.add(assignment);
     }
 
@@ -93,12 +97,14 @@ public class BadEditMovie extends CommandHandler {
 
     List<PersonDto> actorsDto = new LinkedList<>();
     rolesAssignment.forEach(assignment -> {
-      Person actor = assignment.getPerson();
-      PersonDto actorDto = PersonDto.builder().perId(actor.getPerId()).firstName(actor.getFirstName())
-          .secondName(actor.getSecondName()).lastName(actor.getLastName())
-          .birthday(actor.getBirthday().withNano(0).toString()).age(actor.getAge()).rate(actor.getRate())
-          .act(actor.isAct()).build();
-      actorsDto.add(actorDto);
+      if (assignment.isAct()) {
+        Person actor = assignment.getPerson();
+        PersonDto actorDto = PersonDto.builder().perId(actor.getPerId()).firstName(actor.getFirstName())
+            .secondName(actor.getSecondName()).lastName(actor.getLastName())
+            .birthday(actor.getBirthday().withNano(0).toString()).age(actor.getAge()).rate(actor.getRate())
+            .act(actor.isAct()).build();
+        actorsDto.add(actorDto);
+      }
     });
 
     PersonDto directorDto = PersonDto.builder().perId(director.getPerId()).firstName(director.getFirstName())

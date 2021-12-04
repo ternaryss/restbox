@@ -13,6 +13,7 @@ import pl.tss.restbox.core.domain.command.actor.EditActorCmd;
 import pl.tss.restbox.core.domain.dto.PersonDto;
 import pl.tss.restbox.core.domain.entity.Person;
 import pl.tss.restbox.core.handler.CommandHandler;
+import pl.tss.restbox.core.port.output.repo.ActorRepo;
 import pl.tss.restbox.core.port.output.repo.PersonRepo;
 
 /**
@@ -32,6 +33,9 @@ public class BadEditActorTest {
   private CommandHandler handler;
 
   @Mock
+  private ActorRepo actorRepo;
+
+  @Mock
   private PersonRepo personRepo;
 
   @BeforeEach
@@ -46,7 +50,7 @@ public class BadEditActorTest {
     Mockito.when(personRepo.findFirstByPerIdAndDirector(1, false)).thenReturn(mockedActor);
     Mockito.when(personRepo.save(Mockito.any())).thenReturn(modifiedActor);
 
-    handler = new BadEditActor(personRepo);
+    handler = new BadEditActor(actorRepo, personRepo);
   }
 
   @Test
