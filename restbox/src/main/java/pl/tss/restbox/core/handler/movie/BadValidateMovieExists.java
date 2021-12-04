@@ -32,7 +32,7 @@ public class BadValidateMovieExists extends CommandHandler {
     List<ApiErrDetails> errors = new LinkedList<>();
 
     if (command instanceof EditMovieCmd) {
-      input = ((EditMovieCmd) command).getOutput().getMovId();
+      input = ((EditMovieCmd) command).getInput().getMovId();
     } else {
       input = (Integer) command.getInput();
     }
