@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import pl.tss.restbox.core.domain.command.Cmd;
 import pl.tss.restbox.core.domain.command.movie.AddMovieCmd;
+import pl.tss.restbox.core.domain.command.movie.DeleteMovieCmd;
 import pl.tss.restbox.core.domain.command.movie.EditMovieCmd;
 import pl.tss.restbox.core.domain.command.movie.GetMovieCmd;
 import pl.tss.restbox.core.handler.CommandHandler;
@@ -18,6 +19,7 @@ import pl.tss.restbox.core.handler.movie.AddMovie;
 import pl.tss.restbox.core.handler.movie.BadAddMovie;
 import pl.tss.restbox.core.handler.movie.BadEditMovie;
 import pl.tss.restbox.core.handler.movie.BadValidateMovieExists;
+import pl.tss.restbox.core.handler.movie.DeleteMovie;
 import pl.tss.restbox.core.handler.movie.EditMovie;
 import pl.tss.restbox.core.handler.movie.GetMovie;
 import pl.tss.restbox.core.handler.movie.ValidateMovieExists;
@@ -78,6 +80,16 @@ public class MovieFacade extends Facade {
   }
 
   @Transactional
+  private Cmd<?, ?> deleteMovie(DeleteMovieCmd command) {
+    CommandHandler h1 = new ValidateMovieExists(movieRepo);
+    CommandHandler h2 = new DeleteMovie(actorRepo, movieRepo);
+
+    h1.setNext(h2);
+
+    return h1.handle(command);
+  }
+
+  @Transactional
   private Cmd<?, ?> editMovie(EditMovieCmd command) {
     CommandHandler h1 = null;
     CommandHandler h2 = new ValidateNewMovie();
@@ -120,6 +132,8 @@ public class MovieFacade extends Facade {
 
     if (command instanceof AddMovieCmd) {
       return addMovie((AddMovieCmd) command);
+    } else if (command instanceof DeleteMovieCmd) {
+      return deleteMovie((DeleteMovieCmd) command);
     } else if (command instanceof EditMovieCmd) {
       return editMovie((EditMovieCmd) command);
     } else if (command instanceof GetMovieCmd) {
