@@ -52,7 +52,7 @@ public class GetActors extends CommandHandler {
             .act(actor.isAct()).build());
       }
 
-      page = filter.getPagination().generatePage(countedActors, actorsDto);
+      page = pagination.generatePage(countedActors, actorsDto);
     }
 
     ((GetActorsCmd) command).setOutput(page);
