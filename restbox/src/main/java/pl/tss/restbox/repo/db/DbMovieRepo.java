@@ -124,9 +124,9 @@ class DbMovieRepo implements MovieRepo {
   public List<Movie> findByMoviesFilter(MoviesFilter filter) {
     Pagination pagination = filter.getPagination();
     log.debug(
-        "Searching for movies by movies filter [title = {}, genere = {}, country = {}, rate = {}, page = {}, size = {}]",
+        "Searching for movies by movies filter [title = {}, genere = {}, country = {}, rate = {}, page = {}, size = {}, sort = {}]",
         filter.getTitle(), filter.getGenere(), filter.getCountry(), filter.getRate(), pagination.getPage(),
-        pagination.getSize());
+        pagination.getSize(), filter.getSortQuery());
 
     TypedQuery<Movie> query = null;
     String rawQuery = "select movie from Movie movie where movie.act = :act "
