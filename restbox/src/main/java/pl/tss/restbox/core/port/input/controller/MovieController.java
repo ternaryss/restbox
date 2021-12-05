@@ -17,4 +17,6 @@ public interface MovieController<R> {
 
   R getMovie(Integer movId);
 
+  R getMovies(String title, String genere, String country, Integer rate, Integer page, Integer size, String sort);
+
 }

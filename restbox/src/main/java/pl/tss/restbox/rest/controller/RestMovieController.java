@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,11 @@ import pl.tss.restbox.core.domain.command.movie.AddMovieCmd;
 import pl.tss.restbox.core.domain.command.movie.DeleteMovieCmd;
 import pl.tss.restbox.core.domain.command.movie.EditMovieCmd;
 import pl.tss.restbox.core.domain.command.movie.GetMovieCmd;
+import pl.tss.restbox.core.domain.command.movie.GetMoviesCmd;
 import pl.tss.restbox.core.domain.dto.MovieDetailsDto;
+import pl.tss.restbox.core.domain.dto.MovieDto;
+import pl.tss.restbox.core.domain.dto.PageDto;
+import pl.tss.restbox.core.domain.filter.MoviesFilter;
 import pl.tss.restbox.core.facade.MovieFacade;
 import pl.tss.restbox.core.port.input.controller.MovieController;
 
@@ -73,6 +78,31 @@ class RestMovieController implements MovieController<ResponseEntity<?>> {
     log.debug("Movie got [movId = {}]", command.getOutput().getMovId());
 
     return ResponseEntity.status(200).body(command.getOutput());
+  }
+
+  @Override
+  @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<PageDto> getMovies(@RequestParam(name = "title", required = false) String title,
+      @RequestParam(name = "genere", required = false) String genere,
+      @RequestParam(name = "country", required = false) String country,
+      @RequestParam(name = "rate", required = false) Integer rate,
+      @RequestParam(name = "page", required = false) Integer page,
+      @RequestParam(name = "size", required = false) Integer size,
+      @RequestParam(name = "sort", required = false) String sort) {
+    log.debug("Getting movies [title = {}, genere = {}, country = {}, rate = {}, page = {}, size = {}, sort = {}]",
+        title, genere, country, rate, page, size, sort);
+    MoviesFilter filter = new MoviesFilter(title, genere, country, rate, page, size);
+    String sortQuery = sort != null ? sort : "";
+
+    if (!sortQuery.contains("movid")) {
+      sortQuery = sortQuery + ";movid,asc";
+    }
+
+    filter.addSort(sortQuery, MovieDto.SortColumn.values());
+    GetMoviesCmd command = (GetMoviesCmd) movieFacade.execute(new GetMoviesCmd(filter));
+    log.debug("Movies got [movies size = {}]", command.getOutput().getContent().size());
+
+    return ResponseEntity.status(command.getOutput().getContent().size() > 0 ? 200 : 204).body(command.getOutput());
   }
 
 }
