@@ -11,6 +11,8 @@ public interface MovieController<R> {
 
   R addMovie(MovieDetailsDto payload);
 
+  R deleteMovie(Integer movId);
+
   R editMovie(Integer movId, MovieDetailsDto payload);
 
   R getMovie(Integer movId);

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
 import pl.tss.restbox.core.domain.command.movie.AddMovieCmd;
+import pl.tss.restbox.core.domain.command.movie.DeleteMovieCmd;
 import pl.tss.restbox.core.domain.command.movie.EditMovieCmd;
 import pl.tss.restbox.core.domain.command.movie.GetMovieCmd;
 import pl.tss.restbox.core.domain.dto.MovieDetailsDto;
@@ -40,6 +41,16 @@ class RestMovieController implements MovieController<ResponseEntity<?>> {
     log.debug("Movie added [movId = {}]", command.getOutput());
 
     return ResponseEntity.status(201).body(command.getOutput());
+  }
+
+  @Override
+  @RequestMapping(path = "/{movId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<Void> deleteMovie(@PathVariable(value = "movId") Integer movId) {
+    log.debug("Deleting movie [movId = {}]", movId);
+    movieFacade.execute(new DeleteMovieCmd(movId));
+    log.debug("Movie deleted [movId = {}]", movId);
+
+    return ResponseEntity.status(200).build();
   }
 
   @Override
