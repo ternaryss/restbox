@@ -1,8 +1,7 @@
 package pl.tss.restbox.core.domain.command.movie;
 
-import org.springframework.data.domain.jaxb.SpringDataJaxb.PageDto;
-
 import pl.tss.restbox.core.domain.command.Cmd;
+import pl.tss.restbox.core.domain.dto.PageDto;
 import pl.tss.restbox.core.domain.filter.MoviesFilter;
 
 /**
