@@ -82,7 +82,54 @@ class DbMovieRepo implements MovieRepo {
     log.debug("Movies by movies filter count [count = {}]", count);
 
     return count;
+  }
 
+  @Override
+  public long countByMoviesFilterAlsoDeleted(MoviesFilter filter) {
+    log.debug("Counting movies by movies filter [title = {}, genere = {}, country = {}, rate = {}]", filter.getTitle(),
+        filter.getGenere(), filter.getCountry(), filter.getRate());
+
+    long count = 0;
+    TypedQuery<Long> query = null;
+    String rawQuery = "select count(movie) from Movie movie where "
+        + "lower(movie.title) like '%' || lower(:title) || '%' "
+        + "and lower(movie.genere.name) like '%' || lower(:genere) || '%' "
+        + "and lower(movie.country.name) like '%' || lower(:country) || '%'";
+
+    if (filter.getRate() != null) {
+      rawQuery = rawQuery + " and movie.rate = :rate";
+      query = entityManager.createQuery(rawQuery, Long.class).setParameter("rate", filter.getRate());
+    } else {
+      query = entityManager.createQuery(rawQuery, Long.class);
+    }
+
+    if (filter.getTitle() != null) {
+      query.setParameter("title", filter.getTitle().trim());
+    } else {
+      query.setParameter("title", "");
+    }
+
+    if (filter.getGenere() != null) {
+      query.setParameter("genere", filter.getGenere().trim());
+    } else {
+      query.setParameter("genere", "");
+    }
+
+    if (filter.getCountry() != null) {
+      query.setParameter("country", filter.getCountry().trim());
+    } else {
+      query.setParameter("country", "");
+    }
+
+    try {
+      count = query.getSingleResult();
+    } catch (NoResultException ex) {
+      count = 0;
+    }
+
+    log.debug("Movies by movies filter count [count = {}]", count);
+
+    return count;
   }
 
   @Override
@@ -162,6 +209,53 @@ class DbMovieRepo implements MovieRepo {
     }
 
     query.setParameter("act", true);
+
+    List<Movie> movies = query.setFirstResult(pagination.getOffset()).setMaxResults(pagination.getLimit())
+        .getResultList();
+    log.debug("Movies by movies filter found [movies size = {}]", movies != null ? movies.size() : null);
+
+    return movies != null ? movies : new ArrayList<>();
+  }
+
+  @Override
+  public List<Movie> findByMoviesFilterAlsoDeleted(MoviesFilter filter) {
+    Pagination pagination = filter.getPagination();
+    log.debug(
+        "Searching for movies by movies filter [title = {}, genere = {}, country = {}, rate = {}, page = {}, size = {}, sort = {}]",
+        filter.getTitle(), filter.getGenere(), filter.getCountry(), filter.getRate(), pagination.getPage(),
+        pagination.getSize(), filter.getSortQuery());
+
+    TypedQuery<Movie> query = null;
+    String rawQuery = "select movie from Movie movie where lower(movie.title) like '%' || lower(:title) || '%' "
+        + "and lower(movie.genere.name) like '%' || lower(:genere) || '%' "
+        + "and lower(movie.country.name) like '%' || lower(:country) || '%'";
+
+    if (filter.getRate() != null) {
+      rawQuery = rawQuery + " and movie.rate = :rate";
+      rawQuery = rawQuery + filter.getSortQuery();
+      query = entityManager.createQuery(rawQuery, Movie.class).setParameter("rate", filter.getRate());
+    } else {
+      rawQuery = rawQuery + filter.getSortQuery();
+      query = entityManager.createQuery(rawQuery, Movie.class);
+    }
+
+    if (filter.getTitle() != null) {
+      query.setParameter("title", filter.getTitle().trim());
+    } else {
+      query.setParameter("title", "");
+    }
+
+    if (filter.getGenere() != null) {
+      query.setParameter("genere", filter.getGenere().trim());
+    } else {
+      query.setParameter("genere", "");
+    }
+
+    if (filter.getCountry() != null) {
+      query.setParameter("country", filter.getCountry().trim());
+    } else {
+      query.setParameter("country", "");
+    }
 
     List<Movie> movies = query.setFirstResult(pagination.getOffset()).setMaxResults(pagination.getLimit())
         .getResultList();
