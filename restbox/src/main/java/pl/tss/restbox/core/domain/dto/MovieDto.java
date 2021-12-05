@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import pl.tss.restbox.core.domain.filter.Sortable;
 
 /**
  * External short movie info.
@@ -12,8 +14,9 @@ import lombok.Data;
  * @author TSS
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @JsonDeserialize(builder = MovieDto.MovieDtoBuilder.class)
-public class MovieDto {
+public class MovieDto extends PageableDto {
 
   private Integer movId;
   private String title;
@@ -41,6 +44,40 @@ public class MovieDto {
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class MovieDtoBuilder {
+
+  }
+
+  /**
+   * Definition of sorting for movie DTO.
+   */
+  public enum SortColumn implements Sortable {
+
+    MOV_ID("movid", "movie.movId"), TITLE("title", "movie.title"), GENERE("genere", "movie.genere.name"),
+    PREMIERE("premiere", "movie.premiere"), RATE("rate", "movie.rate"), LENGTH("length", "movie.length"),
+    COUNTRY("country", "movie.country.name"), ACT("act", "movie.act");
+
+    private final String field;
+    private final String query;
+
+    SortColumn(String field, String query) {
+      this.field = field;
+      this.query = query;
+    }
+
+    @Override
+    public Sortable[] getColumns() {
+      return SortColumn.values();
+    }
+
+    @Override
+    public String getField() {
+      return field;
+    }
+
+    @Override
+    public String getQuery() {
+      return query;
+    }
 
   }
 
