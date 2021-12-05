@@ -11,4 +11,6 @@ public interface CountryRepo {
 
   Country findFirstByNameIgnoreCase(String name);
 
+  Country findFirstByOrderByCouIdAsc();
+
 }

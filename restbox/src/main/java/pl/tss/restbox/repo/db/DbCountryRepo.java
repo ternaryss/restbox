@@ -31,10 +31,21 @@ class DbCountryRepo implements CountryRepo {
     return country;
   }
 
+  @Override
+  public Country findFirstByOrderByCouIdAsc() {
+    log.debug("Searching for country");
+    Country country = repo.findFirstByActOrderByCouIdAsc(true);
+    log.debug("Country found [couId = {}]", country != null ? country.getCouId() : null);
+
+    return country;
+  }
+
   /**
    * Nested country repository.
    */
   private interface CrudCountryRepo extends CrudRepository<Country, Integer> {
+
+    Country findFirstByActOrderByCouIdAsc(boolean act);
 
     Country findFirstByNameIgnoreCaseAndAct(String name, boolean act);
 
