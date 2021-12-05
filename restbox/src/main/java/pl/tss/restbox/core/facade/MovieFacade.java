@@ -10,6 +10,7 @@ import pl.tss.restbox.core.domain.command.movie.AddMovieCmd;
 import pl.tss.restbox.core.domain.command.movie.DeleteMovieCmd;
 import pl.tss.restbox.core.domain.command.movie.EditMovieCmd;
 import pl.tss.restbox.core.domain.command.movie.GetMovieCmd;
+import pl.tss.restbox.core.domain.command.movie.GetMoviesCmd;
 import pl.tss.restbox.core.handler.CommandHandler;
 import pl.tss.restbox.core.handler.actor.ValidateActorsExists;
 import pl.tss.restbox.core.handler.country.ValidateCountryExists;
@@ -18,10 +19,12 @@ import pl.tss.restbox.core.handler.genere.ValidateGenereExists;
 import pl.tss.restbox.core.handler.movie.AddMovie;
 import pl.tss.restbox.core.handler.movie.BadAddMovie;
 import pl.tss.restbox.core.handler.movie.BadEditMovie;
+import pl.tss.restbox.core.handler.movie.BadGetMovies;
 import pl.tss.restbox.core.handler.movie.BadValidateMovieExists;
 import pl.tss.restbox.core.handler.movie.DeleteMovie;
 import pl.tss.restbox.core.handler.movie.EditMovie;
 import pl.tss.restbox.core.handler.movie.GetMovie;
+import pl.tss.restbox.core.handler.movie.GetMovies;
 import pl.tss.restbox.core.handler.movie.ValidateMovieExists;
 import pl.tss.restbox.core.handler.movie.ValidateNewMovie;
 import pl.tss.restbox.core.port.output.repo.ActorRepo;
@@ -126,6 +129,18 @@ public class MovieFacade extends Facade {
     return h1.handle(command);
   }
 
+  private Cmd<?, ?> getMovies(GetMoviesCmd command) {
+    CommandHandler h1 = null;
+
+    if (super.isValidProfile()) {
+      h1 = new GetMovies(movieRepo);
+    } else {
+      h1 = new BadGetMovies(countryRepo, movieRepo);
+    }
+
+    return h1.handle(command);
+  }
+
   @Override
   public Cmd<?, ?> execute(Cmd<?, ?> command) {
     log.info("Executing movie command [command = {}]", command != null ? command.getClass().getSimpleName() : null);
@@ -138,6 +153,8 @@ public class MovieFacade extends Facade {
       return editMovie((EditMovieCmd) command);
     } else if (command instanceof GetMovieCmd) {
       return getMovie((GetMovieCmd) command);
+    } else if (command instanceof GetMoviesCmd) {
+      return getMovies((GetMoviesCmd) command);
     } else {
       throw new UnsupportedOperationException("Unknown movie command");
     }
