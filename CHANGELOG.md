@@ -4,6 +4,8 @@ History of **restbox** with changes description.
 
 ## Unreleased
 
+- [GET] Get movies with bugs
+- [GET] Get movies without bugs
 - [DELETE] Delete movie without bugs
 - [PUT] Edit movie with bugs
 - [PUT] Edit movie without bugs
