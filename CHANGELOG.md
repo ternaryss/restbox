@@ -4,6 +4,9 @@ History of **restbox** with changes description.
 
 ## Unreleased
 
+- Automated release package creation
+- Windows application launcher
+- Unix application launcher
 - [GET] Get movies with bugs
 - [GET] Get movies without bugs
 - [DELETE] Delete movie without bugs
