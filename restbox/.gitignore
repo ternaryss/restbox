@@ -54,3 +54,7 @@ gradle-app.setting
 ### Database ###
 # Database file
 *.db
+
+### Releasing ###
+# Checksum
+*.md5
