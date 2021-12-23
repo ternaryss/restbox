@@ -19,7 +19,7 @@ import pl.tss.restbox.core.port.output.repo.PersonRepo;
  * @author TSS
  */
 @Slf4j
-public class ValidateActorExists extends CommandHandler {
+public class ValidateActorExists extends CommandHandler<Integer, Void> {
 
   private final PersonRepo personRepo;
 
@@ -28,18 +28,25 @@ public class ValidateActorExists extends CommandHandler {
   }
 
   @Override
-  public Cmd<?, ?> handle(Cmd<?, ?> command) {
-    Integer input = null;
-    List<ApiErrDetails> errors = new LinkedList<>();
-
+  protected Integer getInput(Cmd<?, ?> command) {
     if (command instanceof DeleteActorCmd) {
-      input = ((DeleteActorCmd) command).getInput();
+      return ((DeleteActorCmd) command).getInput();
     } else if (command instanceof EditActorCmd) {
-      input = ((EditActorCmd) command).getInput().getPerId();
+      return ((EditActorCmd) command).getInput().getPerId();
     } else {
-      input = (Integer) command.getInput();
+      throw new UnsupportedOperationException("Command not supported by handler");
     }
+  }
 
+  @Override
+  protected void setOutput(Cmd<?, ?> command, Void output) {
+    throw new UnsupportedOperationException("Command not supported by handler");
+  }
+
+  @Override
+  public Cmd<?, ?> handle(Cmd<?, ?> command) {
+    Integer input = getInput(command);
+    List<ApiErrDetails> errors = new LinkedList<>();
     log.info("Validating if actor exists [perId = {}]", input);
 
     Person actor = personRepo.findFirstByPerIdAndDirector(input, false);

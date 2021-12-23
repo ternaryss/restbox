@@ -19,7 +19,7 @@ import pl.tss.restbox.core.port.output.repo.MovieRepo;
  * @author TSS
  */
 @Slf4j
-public class GetMovie extends CommandHandler {
+public class GetMovie extends CommandHandler<Integer, MovieDetailsDto> {
 
   private final MovieRepo movieRepo;
 
@@ -28,9 +28,26 @@ public class GetMovie extends CommandHandler {
   }
 
   @Override
-  public Cmd<?, ?> handle(Cmd<?, ?> command) {
-    Integer input = (Integer) command.getInput();
+  protected Integer getInput(Cmd<?, ?> command) {
+    if (command instanceof GetMovieCmd) {
+      return ((GetMovieCmd) command).getInput();
+    } else {
+      throw new UnsupportedOperationException("Command not supported by handler");
+    }
+  }
 
+  @Override
+  protected void setOutput(Cmd<?, ?> command, MovieDetailsDto output) {
+    if (command instanceof GetMovieCmd) {
+      ((GetMovieCmd) command).setOutput(output);
+    } else {
+      throw new UnsupportedOperationException("Command not supported by handler");
+    }
+  }
+
+  @Override
+  public Cmd<?, ?> handle(Cmd<?, ?> command) {
+    Integer input = getInput(command);
     log.info("Getting movie [movId = {}]", input);
 
     Movie movie = movieRepo.findFirstByMovId(input);
@@ -66,7 +83,7 @@ public class GetMovie extends CommandHandler {
         .country(movie.getCountry().isAct() ? movie.getCountry().getName() : null).act(movie.isAct())
         .director(directorDto).actors(actorsDto).build();
 
-    ((GetMovieCmd) command).setOutput(movieDto);
+    setOutput(command, movieDto);
     log.info("Movie got [movId = {}]", movie.getMovId());
 
     return super.handle(command);

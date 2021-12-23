@@ -19,30 +19,40 @@ import pl.tss.restbox.core.port.output.repo.CountryRepo;
  * @author TSS
  */
 @Slf4j
-public class ValidateCountryExists extends CommandHandler {
+public class ValidateCountryExists extends CommandHandler<String, Void> {
 
   private final CountryRepo countryRepo;
+
+  private String field = "name";
 
   public ValidateCountryExists(CountryRepo countryRepo) {
     this.countryRepo = countryRepo;
   }
 
   @Override
-  public Cmd<?, ?> handle(Cmd<?, ?> command) {
-    String name = null;
-    String field = "name";
-    List<ApiErrDetails> errors = new LinkedList<>();
-
+  protected String getInput(Cmd<?, ?> command) {
     if (command instanceof AddMovieCmd) {
-      name = ((AddMovieCmd) command).getInput().getCountry();
       field = "country.name";
-    } else if (command instanceof EditMovieCmd) {
-      name = ((EditMovieCmd) command).getInput().getCountry();
-      field = "country.name";
-    } else {
-      name = (String) command.getInput();
-    }
 
+      return ((AddMovieCmd) command).getInput().getCountry();
+    } else if (command instanceof EditMovieCmd) {
+      field = "country.name";
+
+      return ((EditMovieCmd) command).getInput().getCountry();
+    } else {
+      throw new UnsupportedOperationException("Command not supported by handler");
+    }
+  }
+
+  @Override
+  protected void setOutput(Cmd<?, ?> command, Void output) {
+    throw new UnsupportedOperationException("Command not supported by handler");
+  }
+
+  @Override
+  public Cmd<?, ?> handle(Cmd<?, ?> command) {
+    String name = getInput(command);
+    List<ApiErrDetails> errors = new LinkedList<>();
     log.info("Validating if country exists [name = {}]", name);
 
     Country country = countryRepo.findFirstByNameIgnoreCase(name != null ? name.trim() : null);

@@ -17,7 +17,7 @@ import pl.tss.restbox.core.port.output.repo.PersonRepo;
  * @author TSS
  */
 @Slf4j
-public class DeleteActor extends CommandHandler {
+public class DeleteActor extends CommandHandler<Integer, Void> {
 
   private final ActorRepo actorRepo;
   private final PersonRepo personRepo;
@@ -28,8 +28,22 @@ public class DeleteActor extends CommandHandler {
   }
 
   @Override
+  protected Integer getInput(Cmd<?, ?> command) {
+    if (command instanceof DeleteActorCmd) {
+      return ((DeleteActorCmd) command).getInput();
+    } else {
+      throw new UnsupportedOperationException("Command not supported by handler");
+    }
+  }
+
+  @Override
+  protected void setOutput(Cmd<?, ?> command, Void output) {
+    throw new UnsupportedOperationException("Command not supported by handler");
+  }
+
+  @Override
   public Cmd<?, ?> handle(Cmd<?, ?> command) {
-    Integer input = ((DeleteActorCmd) command).getInput();
+    Integer input = getInput(command);
     log.info("Deleting actor [perId = {}]", input);
 
     Person actor = personRepo.findFirstByPerIdAndDirector(input, false);

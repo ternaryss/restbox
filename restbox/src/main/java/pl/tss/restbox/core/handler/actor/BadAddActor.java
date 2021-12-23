@@ -16,7 +16,7 @@ import pl.tss.restbox.core.port.output.repo.PersonRepo;
  * @author TSS
  */
 @Slf4j
-public class BadAddActor extends CommandHandler {
+public class BadAddActor extends CommandHandler<PersonDto, Integer> {
 
   private final PersonRepo personRepo;
 
@@ -25,8 +25,26 @@ public class BadAddActor extends CommandHandler {
   }
 
   @Override
+  protected PersonDto getInput(Cmd<?, ?> command) {
+    if (command instanceof AddActorCmd) {
+      return ((AddActorCmd) command).getInput();
+    } else {
+      throw new UnsupportedOperationException("Command not supported by handler");
+    }
+  }
+
+  @Override
+  protected void setOutput(Cmd<?, ?> command, Integer output) {
+    if (command instanceof AddActorCmd) {
+      ((AddActorCmd) command).setOutput(output);
+    } else {
+      throw new UnsupportedOperationException("Command not supported by handler");
+    }
+  }
+
+  @Override
   public Cmd<?, ?> handle(Cmd<?, ?> command) {
-    PersonDto input = ((AddActorCmd) command).getInput();
+    PersonDto input = getInput(command);
     log.info("Adding actor [firstName = {}, lastName = {}]", input.getFirstName(), input.getLastName());
 
     OffsetDateTime birthday = OffsetDateTime.parse(input.getBirthday());
@@ -34,7 +52,7 @@ public class BadAddActor extends CommandHandler {
     actor.setSecondName(input.getFirstName().trim());
 
     actor = personRepo.save(actor);
-    ((AddActorCmd) command).setOutput(actor.getPerId());
+    setOutput(command, actor.getPerId());
     log.info("Actor added [perId = {}]", actor.getPerId());
 
     return super.handle(command);

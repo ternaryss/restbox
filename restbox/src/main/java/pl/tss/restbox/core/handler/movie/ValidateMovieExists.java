@@ -19,7 +19,7 @@ import pl.tss.restbox.core.port.output.repo.MovieRepo;
  * @author TSS
  */
 @Slf4j
-public class ValidateMovieExists extends CommandHandler {
+public class ValidateMovieExists extends CommandHandler<Integer, Void> {
 
   private final MovieRepo movieRepo;
 
@@ -28,18 +28,25 @@ public class ValidateMovieExists extends CommandHandler {
   }
 
   @Override
-  public Cmd<?, ?> handle(Cmd<?, ?> command) {
-    Integer input = null;
-    List<ApiErrDetails> errors = new LinkedList<>();
-
+  protected Integer getInput(Cmd<?, ?> command) {
     if (command instanceof EditMovieCmd) {
-      input = ((EditMovieCmd) command).getInput().getMovId();
+      return ((EditMovieCmd) command).getInput().getMovId();
     } else if (command instanceof GetMovieCmd) {
-      input = ((GetMovieCmd) command).getInput();
+      return ((GetMovieCmd) command).getInput();
     } else {
-      input = (Integer) command.getInput();
+      throw new UnsupportedOperationException("Command not supported by handler");
     }
+  }
 
+  @Override
+  protected void setOutput(Cmd<?, ?> command, Void output) {
+    throw new UnsupportedOperationException("Command not supported by handler");
+  }
+
+  @Override
+  public Cmd<?, ?> handle(Cmd<?, ?> command) {
+    Integer input = getInput(command);
+    List<ApiErrDetails> errors = new LinkedList<>();
     log.info("Validating if movie exists [movId = {}]", input);
 
     Movie movie = movieRepo.findFirstByMovId(input);

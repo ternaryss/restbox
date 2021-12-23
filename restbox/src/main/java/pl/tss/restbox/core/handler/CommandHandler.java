@@ -8,10 +8,14 @@ import pl.tss.restbox.core.domain.command.Cmd;
  *
  * @author TSS
  */
-public abstract class CommandHandler {
+public abstract class CommandHandler<I, O> {
 
   @Setter
-  private CommandHandler next;
+  private CommandHandler<?, ?> next;
+
+  protected abstract I getInput(Cmd<?, ?> command);
+
+  protected abstract void setOutput(Cmd<?, ?> command, O output);
 
   public Cmd<?, ?> handle(Cmd<?, ?> command) {
     if (next != null) {

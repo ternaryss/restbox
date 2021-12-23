@@ -19,29 +19,40 @@ import pl.tss.restbox.core.port.output.repo.PersonRepo;
  * @author TSS
  */
 @Slf4j
-public class ValidateDirectorExists extends CommandHandler {
+public class ValidateDirectorExists extends CommandHandler<Integer, Void> {
 
   private final PersonRepo personRepo;
+
+  private String field = "perId";
 
   public ValidateDirectorExists(PersonRepo personRepo) {
     this.personRepo = personRepo;
   }
 
   @Override
-  public Cmd<?, ?> handle(Cmd<?, ?> command) {
-    Integer perId = null;
-    String field = "perId";
-    List<ApiErrDetails> errors = new LinkedList<>();
-
+  protected Integer getInput(Cmd<?, ?> command) {
     if (command instanceof AddMovieCmd) {
-      perId = ((AddMovieCmd) command).getInput().getDirector().getPerId();
       field = "director.perId";
+
+      return ((AddMovieCmd) command).getInput().getDirector().getPerId();
     } else if (command instanceof EditMovieCmd) {
-      perId = ((EditMovieCmd) command).getInput().getDirector().getPerId();
       field = "director.perId";
+
+      return ((EditMovieCmd) command).getInput().getDirector().getPerId();
     } else {
-      perId = (Integer) command.getInput();
+      throw new UnsupportedOperationException("Command not supported by handler");
     }
+  }
+
+  @Override
+  protected void setOutput(Cmd<?, ?> command, Void output) {
+    throw new UnsupportedOperationException("Command not supported by handler");
+  }
+
+  @Override
+  public Cmd<?, ?> handle(Cmd<?, ?> command) {
+    Integer perId = getInput(command);
+    List<ApiErrDetails> errors = new LinkedList<>();
 
     log.info("Validating if director exists [perId = {}]", perId);
 

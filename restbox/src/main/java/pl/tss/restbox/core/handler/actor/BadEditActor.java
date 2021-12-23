@@ -19,7 +19,7 @@ import pl.tss.restbox.core.port.output.repo.PersonRepo;
  * @author TSS
  */
 @Slf4j
-public class BadEditActor extends CommandHandler {
+public class BadEditActor extends CommandHandler<PersonDto, PersonDto> {
 
   private final ActorRepo actorRepo;
   private final PersonRepo personRepo;
@@ -30,8 +30,26 @@ public class BadEditActor extends CommandHandler {
   }
 
   @Override
+  protected PersonDto getInput(Cmd<?, ?> command) {
+    if (command instanceof EditActorCmd) {
+      return ((EditActorCmd) command).getInput();
+    } else {
+      throw new UnsupportedOperationException("Command not supported by handler");
+    }
+  }
+
+  @Override
+  protected void setOutput(Cmd<?, ?> command, PersonDto output) {
+    if (command instanceof EditActorCmd) {
+      ((EditActorCmd) command).setOutput(output);
+    } else {
+      throw new UnsupportedOperationException("Command not supported by handler");
+    }
+  }
+
+  @Override
   public Cmd<?, ?> handle(Cmd<?, ?> command) {
-    PersonDto input = ((EditActorCmd) command).getInput();
+    PersonDto input = getInput(command);
     Person actor = personRepo.findFirstByPerIdAndDirector(input.getPerId(), false);
     log.info("Modifying actor [perId = {}]", actor.getPerId());
 
@@ -56,7 +74,7 @@ public class BadEditActor extends CommandHandler {
         .secondName(actor.getSecondName()).lastName(actor.getLastName())
         .birthday(actor.getBirthday().withNano(0).toString()).age(actor.getAge()).rate(actor.getRate())
         .act(actor.isAct()).build();
-    ((EditActorCmd) command).setOutput(actorDto);
+    setOutput(command, actorDto);
     log.info("Actor modified [perId = {}]", actor.getPerId());
 
     return super.handle(command);

@@ -19,21 +19,28 @@ import pl.tss.restbox.core.handler.CommandHandler;
  * @author TSS
  */
 @Slf4j
-public class ValidateNewActor extends CommandHandler {
+public class ValidateNewActor extends CommandHandler<PersonDto, Void> {
+
+  @Override
+  protected PersonDto getInput(Cmd<?, ?> command) {
+    if (command instanceof AddActorCmd) {
+      return ((AddActorCmd) command).getInput();
+    } else if (command instanceof EditActorCmd) {
+      return ((EditActorCmd) command).getInput();
+    } else {
+      throw new UnsupportedOperationException("Command not supported by handler");
+    }
+  }
+
+  @Override
+  protected void setOutput(Cmd<?, ?> command, Void output) {
+    throw new UnsupportedOperationException("Command not supported by handler");
+  }
 
   @Override
   public Cmd<?, ?> handle(Cmd<?, ?> command) {
-    PersonDto input = null;
+    PersonDto input = getInput(command);
     List<ApiErrDetails> errors = new LinkedList<>();
-
-    if (command instanceof AddActorCmd) {
-      input = ((AddActorCmd) command).getInput();
-    } else if (command instanceof EditActorCmd) {
-      input = ((EditActorCmd) command).getInput();
-    } else {
-      input = (PersonDto) command.getInput();
-    }
-
     log.info("Validating new actor data [firstName = {}, lastName = {}]", input.getFirstName(), input.getLastName());
 
     if (input.getFirstName() == null || input.getFirstName().trim().isEmpty()) {

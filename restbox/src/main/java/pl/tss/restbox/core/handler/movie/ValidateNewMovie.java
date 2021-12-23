@@ -19,21 +19,28 @@ import pl.tss.restbox.core.handler.CommandHandler;
  * @author TSS
  */
 @Slf4j
-public class ValidateNewMovie extends CommandHandler {
+public class ValidateNewMovie extends CommandHandler<MovieDetailsDto, Void> {
+
+  @Override
+  protected MovieDetailsDto getInput(Cmd<?, ?> command) {
+    if (command instanceof AddMovieCmd) {
+      return ((AddMovieCmd) command).getInput();
+    } else if (command instanceof EditMovieCmd) {
+      return ((EditMovieCmd) command).getInput();
+    } else {
+      throw new UnsupportedOperationException("Command not supported by handler");
+    }
+  }
+
+  @Override
+  protected void setOutput(Cmd<?, ?> command, Void output) {
+    throw new UnsupportedOperationException("Command not supported by handler");
+  }
 
   @Override
   public Cmd<?, ?> handle(Cmd<?, ?> command) {
-    MovieDetailsDto input = null;
+    MovieDetailsDto input = getInput(command);
     List<ApiErrDetails> errors = new LinkedList<>();
-
-    if (command instanceof AddMovieCmd) {
-      input = ((AddMovieCmd) command).getInput();
-    } else if (command instanceof EditMovieCmd) {
-      input = ((EditMovieCmd) command).getInput();
-    } else {
-      input = (MovieDetailsDto) command.getInput();
-    }
-
     log.info("Validating new movie data [title = {}, premiere = {}]", input.getTitle(), input.getPremiere());
 
     if (input.getTitle() == null || input.getTitle().trim().isEmpty()) {

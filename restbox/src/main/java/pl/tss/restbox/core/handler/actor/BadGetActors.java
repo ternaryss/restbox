@@ -22,7 +22,7 @@ import pl.tss.restbox.core.port.output.repo.PersonRepo;
  * @author TSS
  */
 @Slf4j
-public class BadGetActors extends CommandHandler {
+public class BadGetActors extends CommandHandler<ActorsFilter, PageDto> {
 
   private final PersonRepo personRepo;
 
@@ -31,8 +31,26 @@ public class BadGetActors extends CommandHandler {
   }
 
   @Override
+  protected ActorsFilter getInput(Cmd<?, ?> command) {
+    if (command instanceof GetActorsCmd) {
+      return ((GetActorsCmd) command).getInput();
+    } else {
+      throw new UnsupportedOperationException("Command not supported by handler");
+    }
+  }
+
+  @Override
+  protected void setOutput(Cmd<?, ?> command, PageDto output) {
+    if (command instanceof GetActorsCmd) {
+      ((GetActorsCmd) command).setOutput(output);
+    } else {
+      throw new UnsupportedOperationException("Command not supported by handler");
+    }
+  }
+
+  @Override
   public Cmd<?, ?> handle(Cmd<?, ?> command) {
-    ActorsFilter filter = ((GetActorsCmd) command).getInput();
+    ActorsFilter filter = getInput(command);
     Pagination pagination = filter.getPagination();
     List<PersonDto> actorsDto = new LinkedList<>();
     PageDto page = null;
@@ -65,7 +83,7 @@ public class BadGetActors extends CommandHandler {
       page = badFilter.getPagination().generatePage(countedActors, actorsDto);
     }
 
-    ((GetActorsCmd) command).setOutput(page);
+    setOutput(command, page);
     log.info("Actors for filter got [actorsSize = {}]", actorsDto.size());
 
     return super.handle(command);

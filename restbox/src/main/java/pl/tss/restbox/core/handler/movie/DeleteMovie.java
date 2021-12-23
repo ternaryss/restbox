@@ -17,7 +17,7 @@ import pl.tss.restbox.core.port.output.repo.MovieRepo;
  * @author TSS
  */
 @Slf4j
-public class DeleteMovie extends CommandHandler {
+public class DeleteMovie extends CommandHandler<Integer, Void> {
 
   private final ActorRepo actorRepo;
   private final MovieRepo movieRepo;
@@ -28,8 +28,22 @@ public class DeleteMovie extends CommandHandler {
   }
 
   @Override
+  protected Integer getInput(Cmd<?, ?> command) {
+    if (command instanceof DeleteMovieCmd) {
+      return ((DeleteMovieCmd) command).getInput();
+    } else {
+      throw new UnsupportedOperationException("Command not supported by handler");
+    }
+  }
+
+  @Override
+  protected void setOutput(Cmd<?, ?> command, Void output) {
+    throw new UnsupportedOperationException("Command not supported by handler");
+  }
+
+  @Override
   public Cmd<?, ?> handle(Cmd<?, ?> command) {
-    Integer input = ((DeleteMovieCmd) command).getInput();
+    Integer input = getInput(command);
     log.info("Deleting movie [movId = {}]", input);
 
     Movie movie = movieRepo.findFirstByMovId(input);

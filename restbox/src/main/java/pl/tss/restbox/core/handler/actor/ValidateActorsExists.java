@@ -22,33 +22,42 @@ import pl.tss.restbox.core.port.output.repo.PersonRepo;
  * @author TSS
  */
 @Slf4j
-public class ValidateActorsExists extends CommandHandler {
+public class ValidateActorsExists extends CommandHandler<Set<Integer>, Void> {
 
   private final PersonRepo personRepo;
+
+  private String field = "perId[{}]";
 
   public ValidateActorsExists(PersonRepo personRepo) {
     this.personRepo = personRepo;
   }
 
   @Override
-  @SuppressWarnings("unchecked")
-  public Cmd<?, ?> handle(Cmd<?, ?> command) {
-    Set<Integer> input = null;
-    String field = "perId[{}]";
-    List<ApiErrDetails> errors = new LinkedList<>();
-
+  protected Set<Integer> getInput(Cmd<?, ?> command) {
     if (command instanceof AddMovieCmd) {
-      input = ((AddMovieCmd) command).getInput().getActors().stream().map(PersonDto::getPerId)
-          .collect(Collectors.toSet());
       field = "movie.actors.perId[{}]";
-    } else if (command instanceof EditMovieCmd) {
-      input = ((EditMovieCmd) command).getInput().getActors().stream().map(PersonDto::getPerId)
-          .collect(Collectors.toSet());
-      field = "movie.actors.perId[{}]";
-    } else {
-      input = (Set<Integer>) command.getInput();
-    }
 
+      return ((AddMovieCmd) command).getInput().getActors().stream().map(PersonDto::getPerId)
+          .collect(Collectors.toSet());
+    } else if (command instanceof EditMovieCmd) {
+      field = "movie.actors.perId[{}]";
+
+      return ((EditMovieCmd) command).getInput().getActors().stream().map(PersonDto::getPerId)
+          .collect(Collectors.toSet());
+    } else {
+      throw new UnsupportedOperationException("Command not supported by handler");
+    }
+  }
+
+  @Override
+  protected void setOutput(Cmd<?, ?> command, Void output) {
+    throw new UnsupportedOperationException("Command not supported by handler");
+  }
+
+  @Override
+  public Cmd<?, ?> handle(Cmd<?, ?> command) {
+    Set<Integer> input = getInput(command);
+    List<ApiErrDetails> errors = new LinkedList<>();
     log.info("Validating if actors exists [perIds size = {}]", input.size());
 
     Integer[] identifiers = input.toArray(new Integer[input.size()]);

@@ -28,7 +28,7 @@ import pl.tss.restbox.core.port.output.repo.PersonRepo;
  * @author TSS
  */
 @Slf4j
-public class AddMovie extends CommandHandler {
+public class AddMovie extends CommandHandler<MovieDetailsDto, Integer> {
 
   private final ActorRepo actorRepo;
   private final CountryRepo countryRepo;
@@ -46,8 +46,26 @@ public class AddMovie extends CommandHandler {
   }
 
   @Override
+  protected MovieDetailsDto getInput(Cmd<?, ?> command) {
+    if (command instanceof AddMovieCmd) {
+      return ((AddMovieCmd) command).getInput();
+    } else {
+      throw new UnsupportedOperationException("Command not supported by handler");
+    }
+  }
+
+  @Override
+  protected void setOutput(Cmd<?, ?> command, Integer output) {
+    if (command instanceof AddMovieCmd) {
+      ((AddMovieCmd) command).setOutput(output);
+    } else {
+      throw new UnsupportedOperationException("Command not supported by handler");
+    }
+  }
+
+  @Override
   public Cmd<?, ?> handle(Cmd<?, ?> command) {
-    MovieDetailsDto input = ((AddMovieCmd) command).getInput();
+    MovieDetailsDto input = getInput(command);
     log.info("Adding movie [title = {}, premiere = {}]", input.getTitle(), input.getPremiere());
 
     Country country = countryRepo.findFirstByNameIgnoreCase(input.getCountry().trim());
@@ -70,7 +88,7 @@ public class AddMovie extends CommandHandler {
     }
 
     actorRepo.saveAll(rolesAssignment);
-    ((AddMovieCmd) command).setOutput(movie.getMovId());
+    setOutput(command, movie.getMovId());
     log.info("Movie added [movId = {}]", movie.getMovId());
 
     return super.handle(command);

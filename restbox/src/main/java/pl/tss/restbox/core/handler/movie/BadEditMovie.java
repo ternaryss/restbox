@@ -28,7 +28,7 @@ import pl.tss.restbox.core.port.output.repo.PersonRepo;
  * @author TSS
  */
 @Slf4j
-public class BadEditMovie extends CommandHandler {
+public class BadEditMovie extends CommandHandler<MovieDetailsDto, MovieDetailsDto> {
 
   private final ActorRepo actorRepo;
   private final CountryRepo countryRepo;
@@ -46,17 +46,27 @@ public class BadEditMovie extends CommandHandler {
   }
 
   @Override
-  public Cmd<?, ?> handle(Cmd<?, ?> command) {
-    MovieDetailsDto input = null;
-
+  protected MovieDetailsDto getInput(Cmd<?, ?> command) {
     if (command instanceof EditMovieCmd) {
-      input = ((EditMovieCmd) command).getInput();
+      return ((EditMovieCmd) command).getInput();
     } else {
-      input = (MovieDetailsDto) command.getInput();
+      throw new UnsupportedOperationException("Command not supported by handler");
     }
+  }
 
+  @Override
+  protected void setOutput(Cmd<?, ?> command, MovieDetailsDto output) {
+    if (command instanceof EditMovieCmd) {
+      ((EditMovieCmd) command).setOutput(output);
+    } else {
+      throw new UnsupportedOperationException("Command not supported by handler");
+    }
+  }
+
+  @Override
+  public Cmd<?, ?> handle(Cmd<?, ?> command) {
+    MovieDetailsDto input = getInput(command);
     Movie movie = movieRepo.findFirstByMovIdAlsoDeleted(input.getMovId());
-
     log.info("Modifying movie [movId = {}]", input.getMovId());
 
     Country country = countryRepo.findFirstByNameIgnoreCase(input.getCountry().trim());
@@ -117,7 +127,7 @@ public class BadEditMovie extends CommandHandler {
         .premiere(movie.getPremiere().withNano(0).toString()).rate(movie.getRate()).length(movie.getLength())
         .country(movie.getCountry().getName()).act(movie.isAct()).director(directorDto).actors(actorsDto).build();
 
-    ((EditMovieCmd) command).setOutput(movieDto);
+    setOutput(command, movieDto);
     log.info("Movie modified [movId = {}]", movie.getMovId());
 
     return super.handle(command);

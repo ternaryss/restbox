@@ -20,7 +20,7 @@ import pl.tss.restbox.core.port.output.repo.MovieRepo;
  * @author TSS
  */
 @Slf4j
-public class GetMovies extends CommandHandler {
+public class GetMovies extends CommandHandler<MoviesFilter, PageDto> {
 
   private final MovieRepo movieRepo;
 
@@ -29,8 +29,26 @@ public class GetMovies extends CommandHandler {
   }
 
   @Override
+  protected MoviesFilter getInput(Cmd<?, ?> command) {
+    if (command instanceof GetMoviesCmd) {
+      return ((GetMoviesCmd) command).getInput();
+    } else {
+      throw new UnsupportedOperationException("Command not supported by handler");
+    }
+  }
+
+  @Override
+  protected void setOutput(Cmd<?, ?> command, PageDto output) {
+    if (command instanceof GetMoviesCmd) {
+      ((GetMoviesCmd) command).setOutput(output);
+    } else {
+      throw new UnsupportedOperationException("Command not supported by handler");
+    }
+  }
+
+  @Override
   public Cmd<?, ?> handle(Cmd<?, ?> command) {
-    MoviesFilter filter = ((GetMoviesCmd) command).getInput();
+    MoviesFilter filter = getInput(command);
     Pagination pagination = filter.getPagination();
     List<MovieDto> moviesDto = new LinkedList<>();
     PageDto page = null;
@@ -55,7 +73,7 @@ public class GetMovies extends CommandHandler {
       page = pagination.generatePage(countedMovies, moviesDto);
     }
 
-    ((GetMoviesCmd) command).setOutput(page);
+    setOutput(command, page);
     log.info("Movies for filter got [movies size = {}]", moviesDto.size());
 
     return super.handle(command);
