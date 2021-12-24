@@ -1,5 +1,7 @@
 package pl.tss.restbox.core.facade;
 
+import java.util.Set;
+
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +13,9 @@ import pl.tss.restbox.core.domain.command.movie.DeleteMovieCmd;
 import pl.tss.restbox.core.domain.command.movie.EditMovieCmd;
 import pl.tss.restbox.core.domain.command.movie.GetMovieCmd;
 import pl.tss.restbox.core.domain.command.movie.GetMoviesCmd;
+import pl.tss.restbox.core.domain.dto.MovieDetailsDto;
+import pl.tss.restbox.core.domain.dto.PageDto;
+import pl.tss.restbox.core.domain.filter.MoviesFilter;
 import pl.tss.restbox.core.handler.CommandHandler;
 import pl.tss.restbox.core.handler.actor.ValidateActorsExists;
 import pl.tss.restbox.core.handler.country.ValidateCountryExists;
@@ -60,12 +65,12 @@ public class MovieFacade extends Facade {
 
   @Transactional
   private Cmd<?, ?> addMovie(AddMovieCmd command) {
-    CommandHandler h1 = new ValidateNewMovie();
-    CommandHandler h2 = new ValidateCountryExists(countryRepo);
-    CommandHandler h3 = new ValidateGenereExists(genereRepo);
-    CommandHandler h4 = new ValidateDirectorExists(personRepo);
-    CommandHandler h5 = new ValidateActorsExists(personRepo);
-    CommandHandler h6 = null;
+    CommandHandler<MovieDetailsDto, Void> h1 = new ValidateNewMovie();
+    CommandHandler<String, Void> h2 = new ValidateCountryExists(countryRepo);
+    CommandHandler<String, Void> h3 = new ValidateGenereExists(genereRepo);
+    CommandHandler<Integer, Void> h4 = new ValidateDirectorExists(personRepo);
+    CommandHandler<Set<Integer>, Void> h5 = new ValidateActorsExists(personRepo);
+    CommandHandler<MovieDetailsDto, Integer> h6 = null;
 
     if (super.isValidProfile()) {
       h6 = new AddMovie(actorRepo, countryRepo, genereRepo, movieRepo, personRepo);
@@ -84,8 +89,8 @@ public class MovieFacade extends Facade {
 
   @Transactional
   private Cmd<?, ?> deleteMovie(DeleteMovieCmd command) {
-    CommandHandler h1 = new ValidateMovieExists(movieRepo);
-    CommandHandler h2 = new DeleteMovie(actorRepo, movieRepo);
+    CommandHandler<Integer, Void> h1 = new ValidateMovieExists(movieRepo);
+    CommandHandler<Integer, Void> h2 = new DeleteMovie(actorRepo, movieRepo);
 
     h1.setNext(h2);
 
@@ -94,13 +99,13 @@ public class MovieFacade extends Facade {
 
   @Transactional
   private Cmd<?, ?> editMovie(EditMovieCmd command) {
-    CommandHandler h1 = null;
-    CommandHandler h2 = new ValidateNewMovie();
-    CommandHandler h3 = new ValidateCountryExists(countryRepo);
-    CommandHandler h4 = new ValidateGenereExists(genereRepo);
-    CommandHandler h5 = new ValidateDirectorExists(personRepo);
-    CommandHandler h6 = new ValidateActorsExists(personRepo);
-    CommandHandler h7 = null;
+    CommandHandler<Integer, Void> h1 = null;
+    CommandHandler<MovieDetailsDto, Void> h2 = new ValidateNewMovie();
+    CommandHandler<String, Void> h3 = new ValidateCountryExists(countryRepo);
+    CommandHandler<String, Void> h4 = new ValidateGenereExists(genereRepo);
+    CommandHandler<Integer, Void> h5 = new ValidateDirectorExists(personRepo);
+    CommandHandler<Set<Integer>, Void> h6 = new ValidateActorsExists(personRepo);
+    CommandHandler<MovieDetailsDto, MovieDetailsDto> h7 = null;
 
     if (super.isValidProfile()) {
       h1 = new ValidateMovieExists(movieRepo);
@@ -121,8 +126,8 @@ public class MovieFacade extends Facade {
   }
 
   private Cmd<?, ?> getMovie(GetMovieCmd command) {
-    CommandHandler h1 = new ValidateMovieExists(movieRepo);
-    CommandHandler h2 = new GetMovie(movieRepo);
+    CommandHandler<Integer, Void> h1 = new ValidateMovieExists(movieRepo);
+    CommandHandler<Integer, MovieDetailsDto> h2 = new GetMovie(movieRepo);
 
     h1.setNext(h2);
 
@@ -130,7 +135,7 @@ public class MovieFacade extends Facade {
   }
 
   private Cmd<?, ?> getMovies(GetMoviesCmd command) {
-    CommandHandler h1 = null;
+    CommandHandler<MoviesFilter, PageDto> h1 = null;
 
     if (super.isValidProfile()) {
       h1 = new GetMovies(movieRepo);

@@ -10,6 +10,9 @@ import pl.tss.restbox.core.domain.command.actor.AddActorCmd;
 import pl.tss.restbox.core.domain.command.actor.DeleteActorCmd;
 import pl.tss.restbox.core.domain.command.actor.EditActorCmd;
 import pl.tss.restbox.core.domain.command.actor.GetActorsCmd;
+import pl.tss.restbox.core.domain.dto.PageDto;
+import pl.tss.restbox.core.domain.dto.PersonDto;
+import pl.tss.restbox.core.domain.filter.ActorsFilter;
 import pl.tss.restbox.core.handler.CommandHandler;
 import pl.tss.restbox.core.handler.actor.AddActor;
 import pl.tss.restbox.core.handler.actor.BadAddActor;
@@ -42,8 +45,8 @@ public class ActorFacade extends Facade {
   }
 
   private Cmd<?, ?> addActor(AddActorCmd command) {
-    CommandHandler h1 = new ValidateNewActor();
-    CommandHandler h2 = null;
+    CommandHandler<PersonDto, Void> h1 = new ValidateNewActor();
+    CommandHandler<PersonDto, Integer> h2 = null;
 
     if (super.isValidProfile()) {
       h2 = new AddActor(personRepo);
@@ -58,8 +61,8 @@ public class ActorFacade extends Facade {
 
   @Transactional
   private Cmd<?, ?> deleteActor(DeleteActorCmd command) {
-    CommandHandler h1 = new ValidateActorExists(personRepo);
-    CommandHandler h2 = new DeleteActor(actorRepo, personRepo);
+    CommandHandler<Integer, Void> h1 = new ValidateActorExists(personRepo);
+    CommandHandler<Integer, Void> h2 = new DeleteActor(actorRepo, personRepo);
 
     if (super.isValidProfile()) {
       h1.setNext(h2);
@@ -69,9 +72,9 @@ public class ActorFacade extends Facade {
   }
 
   private Cmd<?, ?> editActor(EditActorCmd command) {
-    CommandHandler h1 = new ValidateActorExists(personRepo);
-    CommandHandler h2 = new ValidateNewActor();
-    CommandHandler h3 = null;
+    CommandHandler<Integer, Void> h1 = new ValidateActorExists(personRepo);
+    CommandHandler<PersonDto, Void> h2 = new ValidateNewActor();
+    CommandHandler<PersonDto, PersonDto> h3 = null;
 
     if (super.isValidProfile()) {
       h3 = new EditActor(personRepo);
@@ -86,7 +89,7 @@ public class ActorFacade extends Facade {
   }
 
   private Cmd<?, ?> getActors(GetActorsCmd command) {
-    CommandHandler h1 = null;
+    CommandHandler<ActorsFilter, PageDto> h1 = null;
 
     if (super.isValidProfile()) {
       h1 = new GetActors(personRepo);
