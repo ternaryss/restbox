@@ -38,7 +38,7 @@ public class DeleteMovieTest {
   private final Actor[] mockedRolesAssignemnt = new Actor[] { new Actor(null, mockedMovie),
       new Actor(null, mockedMovie), new Actor(null, mockedMovie), new Actor(null, mockedMovie) };
 
-  private CommandHandler handler;
+  private CommandHandler<Integer, Void> handler;
 
   @Mock
   private ActorRepo actorRepo;

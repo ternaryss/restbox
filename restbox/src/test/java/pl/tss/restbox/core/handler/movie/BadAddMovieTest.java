@@ -49,7 +49,7 @@ public class BadAddMovieTest {
 
   private MovieDetailsDto movie;
   private AddMovieCmd command;
-  private CommandHandler handler;
+  private CommandHandler<MovieDetailsDto, Integer> handler;
 
   @Mock
   private ActorRepo actorRepo;

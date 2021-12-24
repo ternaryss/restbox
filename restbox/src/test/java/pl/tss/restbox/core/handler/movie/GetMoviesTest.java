@@ -12,6 +12,7 @@ import org.mockito.MockitoAnnotations;
 
 import pl.tss.restbox.core.domain.command.movie.GetMoviesCmd;
 import pl.tss.restbox.core.domain.dto.MovieDto;
+import pl.tss.restbox.core.domain.dto.PageDto;
 import pl.tss.restbox.core.domain.entity.Country;
 import pl.tss.restbox.core.domain.entity.Genere;
 import pl.tss.restbox.core.domain.entity.Movie;
@@ -61,7 +62,7 @@ public class GetMoviesTest {
           .premiere(OffsetDateTime.parse("1957-04-10T00:00:00+02:00").withNano(0).toString()).rate(9).length(96)
           .country("USA").act(true).build() };
 
-  private CommandHandler handler;
+  private CommandHandler<MoviesFilter, PageDto> handler;
 
   @Mock
   private MovieRepo movieRepo;

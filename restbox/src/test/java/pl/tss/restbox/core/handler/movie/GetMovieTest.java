@@ -69,7 +69,7 @@ public class GetMovieTest {
       .length(mockedMovie.getLength()).country(mockedCountry.getName()).act(true).director(mockedDirectorDto)
       .actors(mockedActorsDto).build();
 
-  private CommandHandler handler;
+  private CommandHandler<Integer, MovieDetailsDto> handler;
 
   @Mock
   private MovieRepo movieRepo;

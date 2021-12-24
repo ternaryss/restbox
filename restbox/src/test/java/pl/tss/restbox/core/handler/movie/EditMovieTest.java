@@ -78,7 +78,7 @@ public class EditMovieTest {
     }
   };
 
-  private CommandHandler handler;
+  private CommandHandler<MovieDetailsDto, MovieDetailsDto> handler;
 
   @Mock
   private ActorRepo actorRepo;

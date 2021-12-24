@@ -24,7 +24,7 @@ public class ValidateGenereExistsTest {
 
   private final Genere mockedGenere = new Genere("Action");
 
-  private CommandHandler handler;
+  private CommandHandler<String, Void> handler;
 
   @Mock
   private GenereRepo genereRepo;

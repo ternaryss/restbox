@@ -30,7 +30,7 @@ public class BadEditActorTest {
   private final PersonDto payload = PersonDto.builder().perId(1).firstName("Mot").secondName("Test").lastName("Esiurc")
       .birthday("1999-07-03T00:00+02:00").rate(1).act(false).build();
 
-  private CommandHandler handler;
+  private CommandHandler<PersonDto, PersonDto> handler;
 
   @Mock
   private ActorRepo actorRepo;

@@ -28,7 +28,7 @@ public class ValidateDirectorExistsTest {
   private final Person mockedDirector = new Person("Jan", "Kowalski", OffsetDateTime.parse("1996-08-04T00:00:00+02:00"),
       5, true);
 
-  private CommandHandler handler;
+  private CommandHandler<Integer, Void> handler;
 
   @Mock
   private PersonRepo personRepo;

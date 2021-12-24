@@ -24,7 +24,7 @@ public class BadAddActorTest {
 
   private PersonDto actor;
   private AddActorCmd command;
-  private CommandHandler handler;
+  private CommandHandler<PersonDto, Integer> handler;
 
   @Mock
   private PersonRepo personRepo;

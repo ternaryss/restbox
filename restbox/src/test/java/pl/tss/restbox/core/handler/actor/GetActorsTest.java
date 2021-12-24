@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import pl.tss.restbox.core.domain.command.actor.GetActorsCmd;
+import pl.tss.restbox.core.domain.dto.PageDto;
 import pl.tss.restbox.core.domain.dto.PersonDto;
 import pl.tss.restbox.core.domain.entity.Person;
 import pl.tss.restbox.core.domain.filter.ActorsFilter;
@@ -43,7 +44,7 @@ public class GetActorsTest {
       PersonDto.builder().perId(5).firstName("Pati").lastName("Anderson")
           .birthday(OffsetDateTime.parse("2000-07-20T00:00:00+02:00").withNano(0).toString()).rate(5).build() };
 
-  private CommandHandler handler;
+  private CommandHandler<ActorsFilter, PageDto> handler;
 
   @Mock
   private PersonRepo personRepo;

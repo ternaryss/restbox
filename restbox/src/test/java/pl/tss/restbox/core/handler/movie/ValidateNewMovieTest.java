@@ -26,7 +26,7 @@ public class ValidateNewMovieTest {
   private PersonDto director;
   private MovieDetailsDto movie;
   private AddMovieCmd command;
-  private CommandHandler handler;
+  private CommandHandler<MovieDetailsDto, Void> handler;
 
   @BeforeEach
   public void setup() {

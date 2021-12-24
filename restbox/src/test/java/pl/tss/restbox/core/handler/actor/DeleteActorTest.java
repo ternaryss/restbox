@@ -31,7 +31,7 @@ public class DeleteActorTest {
   private final Actor[] mockedRolesAssignemnt = new Actor[] { new Actor(mockedActor, null),
       new Actor(mockedActor, null), new Actor(mockedActor, null), new Actor(mockedActor, null) };
 
-  private CommandHandler handler;
+  private CommandHandler<Integer, Void> handler;
 
   @Mock
   private ActorRepo actorRepo;

@@ -3,6 +3,7 @@ package pl.tss.restbox.core.handler.actor;
 import java.time.OffsetDateTime;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +35,7 @@ public class ValidateActorsExistsTest {
     }
   };
 
-  private CommandHandler handler;
+  private CommandHandler<Set<Integer>, Void> handler;
 
   @Mock
   private PersonRepo personRepo;

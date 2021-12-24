@@ -1,7 +1,6 @@
 package pl.tss.restbox.core.handler.movie;
 
 import java.time.OffsetDateTime;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
@@ -35,7 +34,7 @@ public class BadValidateMovieExistsTest {
   private final Movie mockedMovie = new Movie("Wanted", OffsetDateTime.parse("2008-06-12T00:00:00+02:00"), 7, 110,
       mockedDirector, mockedCountry, mockedGenere);
 
-  private CommandHandler handler;
+  private CommandHandler<Integer, Void> handler;
 
   @Mock
   private MovieRepo movieRepo;

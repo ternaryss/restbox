@@ -19,7 +19,7 @@ public class ValidateNewActorTest {
 
   private PersonDto actor;
   private AddActorCmd command;
-  private CommandHandler handler;
+  private CommandHandler<PersonDto, Void> handler;
 
   @BeforeEach
   public void setup() {

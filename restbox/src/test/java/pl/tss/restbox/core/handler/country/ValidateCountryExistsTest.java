@@ -24,7 +24,7 @@ public class ValidateCountryExistsTest {
 
   private final Country mockedCountry = new Country("Poland");
 
-  private CommandHandler handler;
+  private CommandHandler<String, Void> handler;
 
   @Mock
   private CountryRepo countryRepo;

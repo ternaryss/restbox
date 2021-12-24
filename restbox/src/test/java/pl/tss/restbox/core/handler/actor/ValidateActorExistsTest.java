@@ -27,7 +27,7 @@ public class ValidateActorExistsTest {
   private final Person mockedActor = new Person("Tom", "Cruise", OffsetDateTime.parse("1962-07-03T00:00:00+02:00"), 10,
       false);
 
-  private CommandHandler handler;
+  private CommandHandler<Integer, Void> handler;
 
   @Mock
   private PersonRepo personRepo;
