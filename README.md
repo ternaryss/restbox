@@ -503,7 +503,7 @@ raw SQL queries.
 
 - **login**: admin
 - **password**: admin
-- **URL**: **restbox_path**/data/restbox
+- **URL**: *<restbox_path>*/data/restbox
 
 <p align="center">
   <img src="assets/database.gif" />
@@ -511,7 +511,7 @@ raw SQL queries.
 
 When application is run first time, database will be populated with sample data. REST API calls to **restbox** can modify 
 database state. To revert all changes during **restbox** usage, use launcher option from **Getting started** chapter or 
-delete directory: **restbox_path**/data.
+delete directory: *<restbox_path>*/data.
 
 ## Contribution guide
 
