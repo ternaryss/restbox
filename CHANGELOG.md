@@ -2,7 +2,7 @@
 
 History of **restbox** with changes description.
 
-## Unreleased
+## 1.0.0 (2021-12-30)
 
 - Automated release package creation
 - Windows application launcher

@@ -9,7 +9,7 @@ plugins {
 }
 
 group = 'pl.tss'
-version = '0.0.0'
+version = '1.0.0'
 sourceCompatibility = '1.8'
 
 configurations {
