@@ -25,6 +25,7 @@ History of **restbox** with changes description.
 - [POST] Add actor without bugs
 - REST API error handling standard
 - Object-relational mapping for whole business model
+- Full database migration for 1.0.0 version
 - Handle database migrations during launch
 - In memory SQL relational database with persistence layer
 - Disabled default CORS policy
